@@ -1,0 +1,86 @@
+{
+  "package": "kr-apartment-market-skill",
+  "manifestVersion": "1.0",
+  "files": [
+    {
+      "path": "MCP_TOOL_SPEC.md",
+      "bytes": 31935,
+      "sha256": "ff03a8fcd68893f644f65f84f4951e0242c17d92329c14c18e4928dd122269b9"
+    },
+    {
+      "path": "PRD.md",
+      "bytes": 38640,
+      "sha256": "fdff99b5a669198c568923e711e246b67fed7fcf989d20414295615e05ca2dce"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4533,
+      "sha256": "accb96a38350f34fd7a65ff253268cbf06233e84303a134304078d5a94f6898d"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 17044,
+      "sha256": "be9d6f3177d5db88518430ad5740609e3a51525043d7eefaf2dce624407f8f0a"
+    },
+    {
+      "path": "VALIDATION.md",
+      "bytes": 4956,
+      "sha256": "c8a96fdbcc74ea8d5ea9fed2d1f1ad00b0de28ad8ea0b5d637ff6a7483cd04e8"
+    },
+    {
+      "path": "agents/openai.yaml",
+      "bytes": 942,
+      "sha256": "7bc113073b703ccb5fd85c9c2c7a25b71856e641417e9e14e333a351d4a5c736"
+    },
+    {
+      "path": "database/DATABASE_SCHEMA.md",
+      "bytes": 16815,
+      "sha256": "dd69e0c74c92db58d640446de7b384d7cad6fd2f4ce43d55f7cff972778448d9"
+    },
+    {
+      "path": "database/schema.sql",
+      "bytes": 61746,
+      "sha256": "71a0c060c66e3fa430b982d5e1302525f1cd786ed2b88439cbd49fdab6ec859c"
+    },
+    {
+      "path": "database/seed.sql",
+      "bytes": 15340,
+      "sha256": "763c6f0eb1bd613a2bc42569526a43eea7070518d82020808da70071fa5093d0"
+    },
+    {
+      "path": "evals/golden-prompts.yaml",
+      "bytes": 19908,
+      "sha256": "6dd796922b7739bfbaba1f3e26b713d54cdb64594f245bd47d834ba75a37a159"
+    },
+    {
+      "path": "mcp/tool-definitions.json",
+      "bytes": 318901,
+      "sha256": "f5aca65d0fc18b7e88c4a53c04d01399f5b79bcf459e927cccf7a14ed81cfd9a"
+    },
+    {
+      "path": "references/DATA_SOURCES.md",
+      "bytes": 10052,
+      "sha256": "2d0adca03ad0b74cfb2f9e6524c2bc07d53775bf74ff90f90426884bd2822e45"
+    },
+    {
+      "path": "references/METRIC_DEFINITIONS.md",
+      "bytes": 10016,
+      "sha256": "91de77e3ca01cde68947019ae6d461a3149e17f5ca0ce3ef8f16a8513dd8ded4"
+    },
+    {
+      "path": "references/OUTPUT_CONTRACT.md",
+      "bytes": 8356,
+      "sha256": "481d1edcdf1bc51aaee8a8e8df2afad2c0f8bd1d46b488301f6ccac1cb08fb4c"
+    },
+    {
+      "path": "references/SAFETY_AND_ACCESS_POLICY.md",
+      "bytes": 7431,
+      "sha256": "2012e0b8093a21728d117b0d51da80032b3a83f4d40ff91ec3d0d81c232da5f3"
+    },
+    {
+      "path": "scripts/validate_package.py",
+      "bytes": 21029,
+      "sha256": "904e94e09e5016fa5228d1b1851c925eeb121a5e237106ad9c728c7e4bd7ac3f"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+interface:
+  display_name: "KR Apartment Market"
+  short_description: "한국 아파트 최신 신고 실거래와 시장 지표 분석"
+  brand_color: "#1F5EFF"
+  default_prompt: >-
+    대한민국 아파트 단지 또는 지역의 최신 신고 실거래를 조회하고,
+    동일 전용면적 기준으로 가격·거래량·회복률·전세가율·추정 갭을
+    근거와 데이터 신선도까지 포함해 분석해 주세요.
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "kr-apartment-market"
+      description: >-
+        대한민국 아파트의 공공 실거래, 단지·지역 식별, 자체 시장 지표,
+        검증된 원문 링크와 OAuth 기반 관심 목록을 제공하는 MCP 서버
+      transport: "streamable_http"
+      # 배포 전에 실제 안정적 HTTPS MCP endpoint로 교체합니다.
+      url: "https://REPLACE_WITH_DEPLOYED_HOST.example/mcp"
