@@ -56,7 +56,7 @@ kr-apartment-market-skill/
 ## 권장 배포 형태
 
 ```text
-ChatGPT / Codex
+ChatGPT / Codex / Claude code / 등등
   └─ KR Apartment Market SKILL
        └─ MCP Streamable HTTP
             ├─ Public Data Adapter
