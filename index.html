@@ -1,0 +1,2444 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <title>KR Apartment Market AI Skill — 한국 아파트 시장을 AI가 근거와 함께 읽도록</title>
+  <meta name="description" content="대한민국 아파트의 최신 신고 실거래, 단지 비교, 지역 시장 흐름, 신고가·회복률·전세가율·추정 갭을 AI가 근거 데이터와 함께 설명하도록 설계한 오픈소스 Skill + MCP 패키지입니다.">
+  <meta name="keywords" content="아파트 실거래, 부동산 AI, MCP, AI Skill, 한국 아파트, 전세가율, 회복률, 오픈소스, MIT License">
+  <meta name="author" content="JTech-CO">
+  <link rel="canonical" href="https://jtech-co.github.io/kr-apartment-market-skill/">
+  <link rel="preload" as="image" href="./images/logo.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="KR Apartment Market AI Skill">
+  <meta property="og:title" content="KR Apartment Market AI Skill">
+  <meta property="og:description" content="한국 아파트의 최신 신고 실거래를 조회하고 비교·분석해, AI가 근거와 함께 설명하도록 만드는 오픈소스 Skill + MCP 패키지.">
+  <meta property="og:url" content="https://jtech-co.github.io/kr-apartment-market-skill/">
+  <meta property="og:image" content="https://raw.githubusercontent.com/JTech-CO/kr-apartment-market-skill/main/images/logo.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1448">
+  <meta property="og:image:height" content="1086">
+  <meta property="og:image:alt" content="KR Apartment Market AI Skill 로고">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="KR Apartment Market AI Skill">
+  <meta name="twitter:description" content="한국 아파트 시장을 AI가 추측이 아닌 최신 신고 데이터와 근거 지표로 읽도록 만드는 오픈소스 패키지.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/JTech-CO/kr-apartment-market-skill/main/images/logo.png">
+  <meta name="twitter:image:alt" content="검은색 아파트 단지 실루엣으로 구성된 KR Apartment Market AI Skill 로고">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0d10'/%3E%3Cpath d='M15 49V24h10v-8h14v12h10v21H15Zm6-5h5v-7h-5v7Zm0-12h5v-5h-5v5Zm11 12h5v-7h-5v7Zm0-12h5v-5h-5v5Zm0-10h5v-4h-5v4Zm11 22h3v-11h-3v11Z' fill='white'/%3E%3C/svg%3E">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "KR Apartment Market AI Skill",
+    "description": "대한민국 아파트 최신 신고 실거래와 시장 지표를 AI가 근거와 함께 설명하도록 설계한 Skill + MCP 명세 패키지",
+    "codeRepository": "https://github.com/JTech-CO/kr-apartment-market-skill",
+    "license": "https://opensource.org/license/mit",
+    "programmingLanguage": ["Markdown", "JSON Schema", "SQL", "Python"],
+    "author": {
+      "@type": "Organization",
+      "name": "JTech-CO",
+      "url": "https://github.com/JTech-CO"
+    }
+  }
+  </script>
+
+  <script>document.documentElement.classList.add('js');</script>
+
+  <style>
+    :root {
+      --ink: #0b0d10;
+      --ink-2: #1a1e24;
+      --muted: #606773;
+      --muted-2: #89909b;
+      --line: #e4e7eb;
+      --line-strong: #d5dae0;
+      --surface: #ffffff;
+      --surface-2: #f6f7f8;
+      --surface-3: #eef1f4;
+      --accent: #2457ff;
+      --accent-soft: #eef2ff;
+      --accent-ink: #1739b8;
+      --positive: #0b7a53;
+      --positive-soft: #eaf8f2;
+      --warning: #a35a00;
+      --warning-soft: #fff5e8;
+      --max: 1180px;
+      --radius-lg: 30px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+      --shadow-sm: 0 10px 30px rgba(11, 13, 16, 0.06);
+      --shadow-lg: 0 30px 80px rgba(11, 13, 16, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 94px;
+      background: var(--surface);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: Pretendard, SUIT, "Noto Sans KR", "Apple SD Gothic Neo", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 17px;
+      line-height: 1.68;
+      letter-spacing: -0.018em;
+      word-break: keep-all;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(36, 87, 255, 0.055), transparent 28rem),
+        radial-gradient(circle at 91% 22%, rgba(11, 13, 16, 0.035), transparent 31rem),
+        #fff;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(36, 87, 255, 0.38);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 1000;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--ink);
+      transform: translateY(-150%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max));
+      margin-inline: auto;
+    }
+
+    .section {
+      padding: 112px 0;
+    }
+
+    .section-tight {
+      padding: 82px 0;
+    }
+
+    .section-alt {
+      position: relative;
+      background: var(--surface-2);
+      border-block: 1px solid var(--line);
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--accent-ink);
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.075em;
+      text-transform: uppercase;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px rgba(36, 87, 255, 0.10);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.58fr);
+      gap: 44px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+
+    .section-head h2,
+    .section-title {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(2.15rem, 4.1vw, 3.85rem);
+      line-height: 1.1;
+      letter-spacing: -0.055em;
+    }
+
+    .section-head p,
+    .section-lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.45vw, 1.15rem);
+      line-height: 1.76;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--ink-2);
+      background: rgba(255, 255, 255, 0.84);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.055em;
+      text-transform: uppercase;
+      box-shadow: 0 5px 16px rgba(11, 13, 16, 0.035);
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--positive);
+      box-shadow: 0 0 0 5px rgba(11, 122, 83, 0.10);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 19px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 12px 28px rgba(11, 13, 16, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: #22262c;
+      box-shadow: 0 16px 34px rgba(11, 13, 16, 0.22);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--line-strong);
+    }
+
+    .btn-secondary:hover {
+      border-color: #aeb5bf;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.76);
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .site-header.is-scrolled {
+      border-bottom-color: var(--line);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 7px 24px rgba(11, 13, 16, 0.04);
+    }
+
+    .nav {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 26px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 8px 19px rgba(11, 13, 16, 0.16);
+    }
+
+    .brand-mark svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .brand-copy {
+      display: grid;
+      line-height: 1.08;
+    }
+
+    .brand-copy strong {
+      overflow: hidden;
+      font-size: 0.9rem;
+      letter-spacing: -0.025em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .brand-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #454b55;
+      font-size: 0.91rem;
+      font-weight: 700;
+      transition: color 160ms ease, background 160ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: var(--surface-2);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      display: inline-grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      color: var(--ink);
+      background: #fff;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      border-color: #aeb5bf;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-btn svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .nav-github {
+      min-height: 42px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: clip;
+      padding: 82px 0 72px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image: radial-gradient(rgba(11, 13, 16, 0.075) 0.75px, transparent 0.75px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.36), transparent 78%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.36), transparent 78%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(440px, 0.98fr);
+      gap: clamp(42px, 6vw, 82px);
+      align-items: center;
+    }
+
+    .hero-copy h1 {
+      margin: 23px 0 25px;
+      max-width: 800px;
+      font-size: clamp(3rem, 6.2vw, 5.65rem);
+      font-weight: 850;
+      line-height: 0.99;
+      letter-spacing: -0.072em;
+      word-break: keep-all;
+    }
+
+    .hero-copy h1 span {
+      display: block;
+      margin-top: 12px;
+      color: var(--accent);
+    }
+
+    .hero-copy > p {
+      max-width: 690px;
+      margin: 0 0 32px;
+      color: #4d5560;
+      font-size: clamp(1.08rem, 1.72vw, 1.28rem);
+      line-height: 1.72;
+      letter-spacing: -0.025em;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 27px;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #555d68;
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 0.85rem;
+      font-weight: 750;
+    }
+
+    .hero-tag svg {
+      width: 16px;
+      height: 16px;
+      color: var(--accent);
+    }
+
+    .freshness-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      max-width: 675px;
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 0.89rem;
+    }
+
+    .freshness-note svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      margin-top: 3px;
+      color: var(--warning);
+    }
+
+    .hero-visual-wrap {
+      position: relative;
+      min-width: 0;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line-strong);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      right: -80px;
+      bottom: -100px;
+      border-radius: 50%;
+      background: rgba(36, 87, 255, 0.065);
+      filter: blur(1px);
+      pointer-events: none;
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 15px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfbfc;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dots span {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #d4d7dc;
+    }
+
+    .window-label {
+      color: var(--muted-2);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.72rem;
+      letter-spacing: -0.02em;
+    }
+
+    .query-card {
+      position: relative;
+      z-index: 2;
+      margin: 20px 20px 0;
+      padding: 16px 18px;
+      border: 1px solid #dfe3e8;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 12px 27px rgba(11, 13, 16, 0.06);
+    }
+
+    .query-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--accent-ink);
+      font-size: 0.74rem;
+      font-weight: 850;
+      letter-spacing: 0.065em;
+      text-transform: uppercase;
+    }
+
+    .query-meta span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .query-card p {
+      margin: 0;
+      color: var(--ink-2);
+      font-size: clamp(1.02rem, 1.8vw, 1.22rem);
+      font-weight: 800;
+      line-height: 1.52;
+      letter-spacing: -0.035em;
+    }
+
+    .logo-stage {
+      position: relative;
+      display: grid;
+      min-height: 286px;
+      place-items: center;
+      padding: 2px 24px 0;
+    }
+
+    .logo-stage img {
+      width: min(100%, 460px);
+      max-height: 285px;
+      object-fit: contain;
+      filter: contrast(1.08);
+      mix-blend-mode: multiply;
+    }
+
+    .pipeline {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      padding: 0 20px 22px;
+    }
+
+    .pipeline-item {
+      min-width: 0;
+      padding: 12px 10px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #545c67;
+      background: rgba(255, 255, 255, 0.92);
+      text-align: center;
+      font-size: 0.76rem;
+      font-weight: 800;
+      line-height: 1.32;
+    }
+
+    .pipeline-item strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.67rem;
+    }
+
+    .floating-badge {
+      position: absolute;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 138px;
+      padding: 12px 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 16px 35px rgba(11, 13, 16, 0.11);
+      backdrop-filter: blur(12px);
+    }
+
+    .floating-badge strong {
+      display: block;
+      font-size: 0.89rem;
+      line-height: 1.1;
+    }
+
+    .floating-badge span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .floating-badge .badge-icon {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .floating-badge .badge-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .badge-tools {
+      left: -30px;
+      bottom: 88px;
+    }
+
+    .badge-license {
+      top: 196px;
+      right: -31px;
+    }
+
+    .stat-band {
+      position: relative;
+      padding: 0 0 30px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.90);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat {
+      padding: 24px 26px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat:last-child {
+      border-right: 0;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(1.32rem, 2.7vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: -0.045em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+      line-height: 1.4;
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .question-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 278px;
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+      transition: transform 190ms ease, border-color 190ms ease, box-shadow 190ms ease;
+    }
+
+    .question-card:hover {
+      transform: translateY(-5px);
+      border-color: #c7cdd5;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .question-card:nth-child(1) {
+      grid-row: span 2;
+      min-height: 574px;
+      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .question-card:nth-child(1)::after {
+      content: "";
+      position: absolute;
+      width: 330px;
+      height: 330px;
+      right: -130px;
+      bottom: -120px;
+      border: 80px solid rgba(255, 255, 255, 0.045);
+      border-radius: 50%;
+    }
+
+    .card-icon {
+      display: grid;
+      width: 45px;
+      height: 45px;
+      place-items: center;
+      margin-bottom: 38px;
+      border-radius: 13px;
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .question-card:nth-child(1) .card-icon {
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .question-card h3 {
+      position: relative;
+      z-index: 2;
+      margin: 0 0 11px;
+      font-size: clamp(1.35rem, 2.3vw, 2rem);
+      line-height: 1.2;
+      letter-spacing: -0.045em;
+    }
+
+    .question-card p {
+      position: relative;
+      z-index: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.72;
+    }
+
+    .question-card:nth-child(1) p {
+      color: #bfc4cb;
+    }
+
+    .sample-query {
+      position: relative;
+      z-index: 2;
+      margin-top: 31px;
+      padding: 16px 17px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      color: #f7f8fa;
+      background: rgba(255, 255, 255, 0.075);
+      font-size: 1rem;
+      font-weight: 720;
+      line-height: 1.55;
+    }
+
+    .answer-preview {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .answer-row {
+      display: grid;
+      grid-template-columns: 95px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+      font-size: 0.87rem;
+    }
+
+    .answer-row:last-child {
+      border-bottom: 0;
+    }
+
+    .answer-row span:first-child {
+      color: #9da4ae;
+      font-weight: 700;
+    }
+
+    .answer-row strong {
+      color: #fff;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .answer-row em {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: #a8c5ff;
+      background: rgba(36, 87, 255, 0.17);
+      font-size: 0.7rem;
+      font-style: normal;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .mini-viz {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      width: 150px;
+      height: 74px;
+      opacity: 0.86;
+      pointer-events: none;
+    }
+
+    .mini-viz-bars {
+      display: flex;
+      height: 100%;
+      align-items: end;
+      justify-content: flex-end;
+      gap: 7px;
+    }
+
+    .mini-viz-bars span {
+      width: 13px;
+      border-radius: 5px 5px 1px 1px;
+      background: #dfe5ff;
+    }
+
+    .mini-viz-bars span:nth-child(1) { height: 26%; }
+    .mini-viz-bars span:nth-child(2) { height: 44%; }
+    .mini-viz-bars span:nth-child(3) { height: 36%; }
+    .mini-viz-bars span:nth-child(4) { height: 70%; background: #8ba6ff; }
+    .mini-viz-bars span:nth-child(5) { height: 92%; background: var(--accent); }
+
+    .flow-wrap {
+      position: relative;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .flow-line {
+      position: absolute;
+      top: 86px;
+      left: calc(12.5% + 4px);
+      right: calc(12.5% + 4px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent) 0 33%, #7f9cff 33% 67%, #c8d3ff 67% 100%);
+    }
+
+    .flow-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .flow-step {
+      text-align: center;
+    }
+
+    .flow-node {
+      display: grid;
+      width: 62px;
+      height: 62px;
+      place-items: center;
+      margin: 21px auto 24px;
+      border: 8px solid #fff;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 0 0 1px var(--line-strong), 0 9px 20px rgba(11, 13, 16, 0.12);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .flow-step:nth-child(2) .flow-node,
+    .flow-step:nth-child(3) .flow-node {
+      background: var(--accent);
+    }
+
+    .flow-step h3 {
+      margin: 0 0 9px;
+      font-size: 1.1rem;
+      letter-spacing: -0.035em;
+    }
+
+    .flow-step p {
+      max-width: 210px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .flow-rule {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 30px;
+      padding: 17px 19px;
+      border: 1px solid #dfe5ff;
+      border-radius: 15px;
+      color: #31405f;
+      background: var(--accent-soft);
+      font-size: 0.92rem;
+    }
+
+    .flow-rule svg {
+      width: 21px;
+      height: 21px;
+      flex: 0 0 auto;
+      margin-top: 2px;
+      color: var(--accent);
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .audience-card {
+      display: flex;
+      min-height: 310px;
+      flex-direction: column;
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+      transition: transform 190ms ease, box-shadow 190ms ease;
+    }
+
+    .audience-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .audience-index {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted-2);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.73rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .audience-glyph {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      place-items: center;
+      margin: 30px 0 27px;
+      border-radius: 14px;
+      color: var(--ink);
+      background: var(--surface-3);
+    }
+
+    .audience-glyph svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .audience-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.28rem;
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+    }
+
+    .audience-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.91rem;
+      line-height: 1.66;
+    }
+
+    .audience-card .use-label {
+      display: inline-flex;
+      width: fit-content;
+      margin-top: auto;
+      padding-top: 24px;
+      color: var(--accent-ink);
+      font-size: 0.8rem;
+      font-weight: 850;
+    }
+
+    .license-panel {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(32px, 5vw, 58px);
+      border-radius: var(--radius-lg);
+      color: #fff;
+      background: var(--ink);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .license-panel::before,
+    .license-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .license-panel::before {
+      width: 440px;
+      height: 440px;
+      top: -260px;
+      right: -120px;
+      border: 100px solid rgba(36, 87, 255, 0.25);
+    }
+
+    .license-panel::after {
+      width: 220px;
+      height: 220px;
+      bottom: -170px;
+      left: 26%;
+      border: 70px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .license-top {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.48fr);
+      gap: 42px;
+      align-items: end;
+    }
+
+    .license-top .section-kicker {
+      color: #a9c0ff;
+    }
+
+    .license-top .section-kicker::before {
+      background: #7f9cff;
+      box-shadow: 0 0 0 5px rgba(127, 156, 255, 0.14);
+    }
+
+    .license-top h2 {
+      margin: 0;
+      max-width: 790px;
+      font-size: clamp(2.35rem, 5vw, 4.45rem);
+      line-height: 1.04;
+      letter-spacing: -0.06em;
+    }
+
+    .license-top p {
+      margin: 0;
+      color: #b9c0ca;
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .license-rights {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 35px 0 30px;
+    }
+
+    .license-rights span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      color: #e8ebef;
+      background: rgba(255, 255, 255, 0.065);
+      font-size: 0.82rem;
+      font-weight: 760;
+    }
+
+    .license-rights svg {
+      width: 15px;
+      height: 15px;
+      color: #9db6ff;
+    }
+
+    .build-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .build-card {
+      min-height: 210px;
+      padding: 21px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.055);
+      backdrop-filter: blur(8px);
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .build-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.085);
+    }
+
+    .build-card .build-number {
+      color: #839fff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .build-card h3 {
+      margin: 31px 0 10px;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      letter-spacing: -0.035em;
+    }
+
+    .build-card p {
+      margin: 0;
+      color: #aeb5bf;
+      font-size: 0.86rem;
+      line-height: 1.65;
+    }
+
+    .license-note {
+      position: relative;
+      z-index: 2;
+      margin: 21px 0 0;
+      color: #8f97a2;
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .architecture-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .architecture-copy {
+      display: flex;
+      flex-direction: column;
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+    }
+
+    .architecture-copy h3 {
+      margin: 0 0 14px;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.16;
+      letter-spacing: -0.05em;
+    }
+
+    .architecture-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+      line-height: 1.72;
+    }
+
+    .architecture-points {
+      display: grid;
+      gap: 10px;
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .architecture-points li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #3e4651;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .architecture-points svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      margin-top: 4px;
+      color: var(--positive);
+    }
+
+    .architecture-copy .btn {
+      width: fit-content;
+      margin-top: auto;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .architecture-diagram {
+      display: grid;
+      gap: 12px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-2);
+    }
+
+    .diagram-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .diagram-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .diagram-node {
+      position: relative;
+      display: flex;
+      min-height: 102px;
+      align-items: center;
+      gap: 14px;
+      padding: 17px;
+      border: 1px solid var(--line-strong);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 7px 18px rgba(11, 13, 16, 0.035);
+    }
+
+    .diagram-node.primary {
+      color: #fff;
+      background: var(--ink);
+      border-color: var(--ink);
+      box-shadow: 0 14px 29px rgba(11, 13, 16, 0.14);
+    }
+
+    .diagram-node.accent {
+      border-color: #cbd6ff;
+      background: var(--accent-soft);
+    }
+
+    .diagram-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--surface-3);
+    }
+
+    .diagram-node.primary .diagram-icon {
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .diagram-node.accent .diagram-icon {
+      color: var(--accent);
+      background: #fff;
+    }
+
+    .diagram-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .diagram-node strong {
+      display: block;
+      font-size: 0.95rem;
+      line-height: 1.3;
+      letter-spacing: -0.025em;
+    }
+
+    .diagram-node span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .diagram-node.primary span {
+      color: #aeb5bf;
+    }
+
+    .diagram-arrow {
+      display: grid;
+      height: 26px;
+      place-items: center;
+      color: #9299a3;
+    }
+
+    .diagram-arrow svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .principle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .principle-card {
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: #fff;
+    }
+
+    .principle-card .principle-label {
+      display: inline-flex;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--accent-ink);
+      background: var(--accent-soft);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.69rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .principle-card h3 {
+      margin: 24px 0 12px;
+      font-size: 1.4rem;
+      line-height: 1.22;
+      letter-spacing: -0.045em;
+    }
+
+    .principle-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.68;
+    }
+
+    .cta-section {
+      padding: 74px 0 98px;
+    }
+
+    .cta-panel {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 36px;
+      align-items: center;
+      padding: clamp(34px, 6vw, 62px);
+      border: 1px solid #d6dffb;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #f7f9ff 0%, #edf2ff 100%);
+    }
+
+    .cta-panel::after {
+      content: "";
+      position: absolute;
+      width: 270px;
+      height: 270px;
+      right: -120px;
+      bottom: -170px;
+      border: 72px solid rgba(36, 87, 255, 0.10);
+      border-radius: 50%;
+    }
+
+    .cta-copy {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-copy h2 {
+      margin: 0 0 14px;
+      max-width: 780px;
+      font-size: clamp(2.15rem, 4.7vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.055em;
+    }
+
+    .cta-copy p {
+      max-width: 680px;
+      margin: 0;
+      color: #566178;
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    .cta-actions {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 210px;
+    }
+
+    .site-footer {
+      padding: 30px 0 38px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 850;
+    }
+
+    .footer-brand .brand-mark {
+      width: 31px;
+      height: 31px;
+      border-radius: 9px;
+      box-shadow: none;
+    }
+
+    .footer-brand .brand-mark svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      font-weight: 740;
+      transition: color 160ms ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 300;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 14px 34px rgba(11, 13, 16, 0.25);
+      font-size: 0.88rem;
+      font-weight: 800;
+      opacity: 0;
+      transform: translate(-50%, 18px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 600ms cubic-bezier(.2,.7,.2,1), transform 600ms cubic-bezier(.2,.7,.2,1);
+    }
+
+    .js .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(390px, 0.86fr);
+        gap: 45px;
+      }
+
+      .floating-badge {
+        display: none;
+      }
+
+      .audience-grid,
+      .build-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .architecture-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .architecture-copy .btn {
+        margin-top: 28px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 62px;
+      }
+
+      .hero-grid,
+      .section-head,
+      .license-top {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        max-width: 800px;
+      }
+
+      .hero-copy h1 {
+        max-width: 850px;
+      }
+
+      .hero-visual-wrap {
+        width: min(100%, 650px);
+        margin-inline: auto;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat:nth-child(2) {
+        border-right: 0;
+      }
+
+      .stat:nth-child(-n+2) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .question-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .question-card:nth-child(1) {
+        grid-row: auto;
+        min-height: auto;
+      }
+
+      .flow-line {
+        display: none;
+      }
+
+      .flow-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px 18px;
+      }
+
+      .flow-node {
+        margin-top: 0;
+      }
+
+      .principle-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-actions {
+        width: fit-content;
+        min-width: min(100%, 260px);
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        font-size: 16.5px;
+        word-break: keep-all;
+      }
+
+      .container {
+        width: min(calc(100% - 28px), var(--max));
+      }
+
+      .section {
+        padding: 82px 0;
+      }
+
+      .section-tight {
+        padding: 66px 0;
+      }
+
+      .nav {
+        min-height: 68px;
+      }
+
+      .brand-copy strong {
+        max-width: 170px;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      .nav-github span {
+        display: none;
+      }
+
+      .nav-github {
+        width: 42px;
+        padding: 0;
+      }
+
+      .hero {
+        padding: 44px 0 56px;
+      }
+
+      .hero-copy h1 {
+        font-size: clamp(2.45rem, 11.5vw, 3.85rem);
+      }
+
+      .hero-copy h1 span {
+        margin-top: 9px;
+      }
+
+      .hero-copy > p {
+        font-size: 1.04rem;
+      }
+
+      .btn {
+        min-height: 50px;
+      }
+
+      .hero-card {
+        border-radius: 23px;
+      }
+
+      .query-card {
+        margin: 14px 14px 0;
+      }
+
+      .logo-stage {
+        min-height: 220px;
+        padding-inline: 14px;
+      }
+
+      .logo-stage img {
+        max-height: 215px;
+      }
+
+      .pipeline {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 14px 16px;
+      }
+
+      .stats,
+      .audience-grid,
+      .build-grid,
+      .flow-grid,
+      .diagram-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stat {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stat:last-child {
+        border-bottom: 0;
+      }
+
+      .section-head {
+        margin-bottom: 34px;
+      }
+
+      .question-card,
+      .principle-card,
+      .audience-card,
+      .architecture-copy,
+      .architecture-diagram {
+        padding: 23px;
+      }
+
+      .mini-viz {
+        display: none;
+      }
+
+      .answer-row {
+        grid-template-columns: 82px 1fr;
+      }
+
+      .answer-row em {
+        grid-column: 2;
+        width: fit-content;
+      }
+
+      .flow-wrap {
+        padding: 25px 20px;
+      }
+
+      .flow-step {
+        display: grid;
+        grid-template-columns: 62px 1fr;
+        column-gap: 17px;
+        align-items: start;
+        text-align: left;
+      }
+
+      .flow-node {
+        grid-row: span 2;
+        margin: 0;
+      }
+
+      .flow-step h3,
+      .flow-step p {
+        max-width: none;
+        margin-inline: 0;
+      }
+
+      .license-panel {
+        padding: 31px 22px;
+        border-radius: 23px;
+      }
+
+      .license-top h2 {
+        font-size: clamp(2.25rem, 11vw, 3.7rem);
+      }
+
+      .architecture-diagram {
+        gap: 9px;
+      }
+
+      .diagram-arrow {
+        height: 20px;
+      }
+
+      .cta-panel {
+        padding: 31px 23px;
+        border-radius: 23px;
+      }
+
+      .cta-actions {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .cta-actions .btn {
+        width: 100%;
+      }
+
+      .footer-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .js .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="KR Apartment Market AI Skill 홈">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M5 26V13h6V8h9v7h7v11H5Z" fill="currentColor"/>
+            <path d="M9 17h3M9 21h3M15 12h3M15 17h3M15 21h3M22 19h2M22 23h2" stroke="#0b0d10" stroke-width="1.7"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <strong>KR Apartment Market</strong>
+          <span>AI Skill</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="#uses">활용</a>
+        <a href="#flow">작동 방식</a>
+        <a href="#audience">대상</a>
+        <a href="#mit">MIT 활용</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" data-share aria-label="이 페이지 공유하기" title="공유">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8.7 12.8 15.4 16.7M15.4 7.3 8.7 11.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="6.5" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="17.5" cy="6" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="17.5" cy="18" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </button>
+        <a class="btn btn-primary nav-github" href="https://github.com/JTech-CO/kr-apartment-market-skill" target="_blank" rel="noopener noreferrer" aria-label="GitHub 저장소 열기">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .8A11.4 11.4 0 0 0 8.4 23c.6.1.8-.3.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C15.8 4.7 16.8 5 16.8 5c.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.4.4.8 1.1.8 2.1v3.4c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>Open source · MIT License</div>
+          <h1>한국 아파트 시장을,<span>AI가 근거와 함께 읽도록.</span></h1>
+          <p>
+            최신 신고 실거래를 불러오고, 동일 면적 비교·회복률·전세가율·거래량을 계산한 뒤
+            <strong>사실과 해석을 구분해 답하도록</strong> 설계한 Skill + MCP 패키지입니다.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" href="https://github.com/JTech-CO/kr-apartment-market-skill" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .8A11.4 11.4 0 0 0 8.4 23c.6.1.8-.3.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C15.8 4.7 16.8 5 16.8 5c.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.4.4.8 1.1.8 2.1v3.4c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/>
+              </svg>
+              GitHub에서 살펴보기
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a class="btn btn-secondary" href="#uses">
+              활용 방식 보기
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 5v14m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          <div class="hero-tags" aria-label="프로젝트 특성">
+            <span class="hero-tag">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+              실거래 기반
+            </span>
+            <span class="hero-tag">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 8-4 4 4 4m10-8 4 4-4 4M14 4l-4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Skill + MCP
+            </span>
+            <span class="hero-tag">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s8-3.4 8-10V5l-8-3-8 3v6c0 6.6 8 10 8 10Z" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 11.7 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Public-data first
+            </span>
+          </div>
+
+          <div class="freshness-note">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>이 프로젝트의 “실시간”은 주식 체결형 가격이 아니라, 원천 시스템에 <strong>최신으로 신고·공개된 실거래 데이터</strong>를 뜻합니다.</span>
+          </div>
+        </div>
+
+        <div class="hero-visual-wrap reveal" aria-label="질문이 데이터 기반 답변으로 변환되는 예시">
+          <article class="hero-card">
+            <div class="window-bar" aria-hidden="true">
+              <div class="window-dots"><span></span><span></span><span></span></div>
+              <span class="window-label">kr-apartment-market.skill</span>
+            </div>
+
+            <div class="query-card">
+              <div class="query-meta"><span></span>Example query</div>
+              <p>“수지구 전용 84㎡ 중 최근 거래량이 살아난 단지를 찾아줘.”</p>
+            </div>
+
+            <div class="logo-stage">
+              <img src="./images/logo.png" alt="중앙에 배치된 검은색 아파트 단지 실루엣 로고" width="1448" height="1086">
+            </div>
+
+            <div class="pipeline" aria-label="처리 단계">
+              <div class="pipeline-item"><strong>01</strong>지역 해석</div>
+              <div class="pipeline-item"><strong>02</strong>거래 조회</div>
+              <div class="pipeline-item"><strong>03</strong>지표 계산</div>
+              <div class="pipeline-item"><strong>04</strong>근거 설명</div>
+            </div>
+          </article>
+
+          <div class="floating-badge badge-tools" aria-hidden="true">
+            <span class="badge-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h6v6H5V5Zm8 0h6v6h-6V5ZM5 13h6v6H5v-6Zm8 0h6v6h-6v-6Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <span><strong>14 MCP Tools</strong><span>조회부터 관심 단지까지</span></span>
+          </div>
+
+          <div class="floating-badge badge-license" aria-hidden="true">
+            <span class="badge-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l4 4v14H7V3Z" stroke="currentColor" stroke-width="1.8"/><path d="M14 3v5h5M10 13h5m-5 4h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <span><strong>MIT License</strong><span>수정·배포·상업 활용</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stat-band" aria-label="프로젝트 구성 요약">
+      <div class="container stats reveal">
+        <div class="stat"><strong>14</strong><span>MCP 도구 정의</span></div>
+        <div class="stat"><strong>51</strong><span>Golden Prompt 평가 사례</span></div>
+        <div class="stat"><strong>16+</strong><span>PostgreSQL 대상 버전</span></div>
+        <div class="stat"><strong>MIT</strong><span>오픈소스 라이선스</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="uses">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">What it can answer</p>
+            <h2>단순 가격 조회보다,<br>시장 맥락을 묻는 데 적합합니다.</h2>
+          </div>
+          <p>단지명과 지역을 안정적으로 해석하고, 동일 전용면적·동일 기간의 데이터를 기준으로 비교합니다. 계산은 도구가 수행하고 AI는 그 근거를 설명합니다.</p>
+        </div>
+
+        <div class="question-grid">
+          <article class="question-card reveal">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 20V10h4v10m2 0V4h4v16m2 0v-7h4v7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <h3>지역 시장 펄스</h3>
+            <p>거래량, 신고가, 회복률과 표본 신뢰도를 함께 보며 “지금 무엇이 달라졌는가”를 요약합니다.</p>
+            <div class="sample-query">“마포구 전용 84㎡ 중 전고점 회복률과 거래량이 함께 오른 단지를 보여줘.”</div>
+            <div class="answer-preview" aria-label="답변 구조 예시">
+              <div class="answer-row"><span>사실</span><strong>최근 30일 거래 6건</strong><em>원천 데이터</em></div>
+              <div class="answer-row"><span>파생 지표</span><strong>거래량 모멘텀 2.0</strong><em>산식 적용</em></div>
+              <div class="answer-row"><span>해석</span><strong>단기 유동성 회복 후보</strong><em>조건부 설명</em></div>
+            </div>
+          </article>
+
+          <article class="question-card reveal">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 18 10 12l4 4 6-8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>최근 실거래와 회복률</h3>
+            <p>최신 거래, 기간 중위가, 역대 최고가를 분리하고 표본 수와 취소 거래 반영 여부까지 표시합니다.</p>
+            <div class="mini-viz mini-viz-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+          </article>
+
+          <article class="question-card reveal">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 4H4v16h4M16 4h4v16h-4M8 8h8M8 12h8M8 16h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <h3>동일 면적 단지 비교</h3>
+            <p>서로 다른 평형을 섞지 않고 같은 전용면적·기간·필터·산식 버전으로 단지를 비교합니다.</p>
+          </article>
+
+          <article class="question-card reveal">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 0-6 6v3.5L4 16h16l-2-3.5V9a6 6 0 0 0-6-6Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 19a2.7 2.7 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <h3>관심 단지 변경 브리핑</h3>
+            <p>신규 신고, 취소·정정, 신고가, 거래량 변화 등 관심 단지에서 달라진 내용만 골라 요약할 수 있습니다.</p>
+          </article>
+
+          <article class="question-card reveal">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 19 19 5M8 5H5v3m11 11h3v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="16" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="8" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg>
+            </span>
+            <h3>전세가율과 추정 갭</h3>
+            <p>같은 면적·표본 기간의 매매와 전세 중위값을 사용하며, 실제 동일 매물 쌍이 아닌 값은 “추정”으로 구분합니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="flow">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Evidence-first workflow</p>
+            <h2>AI가 가격을 외우는 대신,<br>필요한 순간에 데이터를 호출합니다.</h2>
+          </div>
+          <p>자연어 질문을 곧바로 답하지 않습니다. 대상을 해석하고, 허용된 원천에서 거래를 조회한 뒤, 버전이 고정된 산식으로 지표를 계산합니다.</p>
+        </div>
+
+        <div class="flow-wrap reveal">
+          <div class="flow-line" aria-hidden="true"></div>
+          <div class="flow-grid">
+            <article class="flow-step">
+              <div class="flow-node">01</div>
+              <h3>질문 해석</h3>
+              <p>지역·단지·면적·기간·거래 유형을 구조화합니다.</p>
+            </article>
+            <article class="flow-step">
+              <div class="flow-node">02</div>
+              <h3>MCP 도구 호출</h3>
+              <p>모호한 단지명을 해소하고 최신 신고 거래를 조회합니다.</p>
+            </article>
+            <article class="flow-step">
+              <div class="flow-node">03</div>
+              <h3>지표 계산</h3>
+              <p>회복률·거래량·전세가율 등을 결정론적으로 계산합니다.</p>
+            </article>
+            <article class="flow-step">
+              <div class="flow-node">04</div>
+              <h3>근거 설명</h3>
+              <p>사실, 파생 지표, 해석과 주의사항을 분리해 답합니다.</p>
+            </article>
+          </div>
+          <div class="flow-rule">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s8-3.4 8-10V5l-8-3-8 3v6c0 6.6 8 10 8 10Z" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 11.7 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span><strong>핵심 원칙:</strong> 최신성이 필요한 질문을 모델 내부 지식으로 추측하지 않으며, 취소·정정·표본 부족과 데이터 기준 시각을 숨기지 않습니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="audience">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Who it is for</p>
+            <h2>아파트 데이터를 “조회”에서<br>“설명 가능한 도구”로 바꾸려는 사람들.</h2>
+          </div>
+          <p>완성된 투자 추천 서비스가 아니라, 신뢰 가능한 부동산 AI를 설계하기 위한 기반 패키지입니다. 개인 프로젝트부터 사내 도구까지 범위를 확장할 수 있습니다.</p>
+        </div>
+
+        <div class="audience-grid">
+          <article class="audience-card reveal">
+            <div class="audience-index"><span>01</span><span>Personal</span></div>
+            <span class="audience-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m3 11 9-7 9 7v9H3v-9Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <h3>실수요자·개인 사용자</h3>
+            <p>관심 단지의 최근 신고 거래와 전세 흐름을 같은 기준으로 비교하고 변경사항을 브리핑받고 싶은 사람.</p>
+            <span class="use-label">관심 단지 · 단지 비교</span>
+          </article>
+
+          <article class="audience-card reveal">
+            <div class="audience-index"><span>02</span><span>Builder</span></div>
+            <span class="audience-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m8 9-4 3 4 3m8-6 4 3-4 3M14 5l-4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>개발자·AI 빌더</h3>
+            <p>ChatGPT, Codex, Claude Code 등 에이전트에 한국 부동산 조회·분석 능력을 MCP로 연결하려는 개발자.</p>
+            <span class="use-label">Agent · MCP · API</span>
+          </article>
+
+          <article class="audience-card reveal">
+            <div class="audience-index"><span>03</span><span>Research</span></div>
+            <span class="audience-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V8m5 11V4m5 15v-7m5 7V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="m4 10 5-4 5 8 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3>리서처·콘텐츠 제작자</h3>
+            <p>지역별 거래 흐름과 지표 산식을 재현 가능한 형태로 분석하고, 원천 링크와 기준 시각을 함께 제시하려는 사람.</p>
+            <span class="use-label">리서치 · 브리핑 · 시각화</span>
+          </article>
+
+          <article class="audience-card reveal">
+            <div class="audience-index"><span>04</span><span>Team</span></div>
+            <span class="audience-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="9" r="2" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 20c.4-4 2.2-6 5.5-6s5.1 2 5.5 6M15 15c3-.2 4.7 1.5 5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <h3>프롭테크·사내 분석팀</h3>
+            <p>사내 대시보드, 고객 상담 보조, 시장 모니터링 등에 독립적인 분석 워크플로를 적용하려는 팀.</p>
+            <span class="use-label">Dashboard · Internal tool</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight" id="mit">
+      <div class="container">
+        <div class="license-panel reveal">
+          <div class="license-top">
+            <div>
+              <p class="section-kicker">Build with MIT</p>
+              <h2>코드를 가져가서,<br>당신의 부동산 AI로 확장하십시오.</h2>
+            </div>
+            <p>MIT 라이선스 아래에서 사용·수정·배포·재라이선스·상업 활용이 가능합니다. 저작권 고지와 라이선스 문구는 유지해야 하며, 데이터 원천의 별도 이용 조건은 각각 확인해야 합니다.</p>
+          </div>
+
+          <div class="license-rights" aria-label="MIT 라이선스 활용 범위">
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>사용</span>
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>수정</span>
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>배포</span>
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>상업 활용</span>
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>서브라이선스</span>
+          </div>
+
+          <div class="build-grid">
+            <article class="build-card">
+              <span class="build-number">BUILD 01</span>
+              <h3>관심 단지 레이더</h3>
+              <p>신규 실거래, 취소·정정, 신고가와 거래량 변화를 매일 요약하는 개인 브리핑 서비스.</p>
+            </article>
+            <article class="build-card">
+              <span class="build-number">BUILD 02</span>
+              <h3>지역 시장 대시보드</h3>
+              <p>구·동·면적별 거래량, 회복률, 전세가율과 데이터 신뢰도를 시각화하는 웹 대시보드.</p>
+            </article>
+            <article class="build-card">
+              <span class="build-number">BUILD 03</span>
+              <h3>부동산 상담 보조 AI</h3>
+              <p>고객 질문에서 단지와 조건을 해석하고, 담당자가 확인할 근거 자료를 빠르게 정리하는 사내 도구.</p>
+            </article>
+            <article class="build-card">
+              <span class="build-number">BUILD 04</span>
+              <h3>리서치·콘텐츠 자동화</h3>
+              <p>지역별 시장 변화와 지표를 정기적으로 분석해 보고서, 뉴스레터, 콘텐츠 초안을 만드는 파이프라인.</p>
+            </article>
+          </div>
+
+          <p class="license-note">라이선스 안내는 이해를 돕기 위한 요약입니다. 실제 사용·배포 시 저장소의 LICENSE 원문과 각 데이터 제공자의 이용 조건을 확인해야 합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Architecture at a glance</p>
+            <h2>문서 모음이 아니라,<br>구현 가능한 설계 패키지입니다.</h2>
+          </div>
+          <p>PRD, Skill 워크플로, MCP 도구 명세, JSON Schema, PostgreSQL 데이터베이스, 평가 사례와 검증 스크립트가 하나의 저장소에 연결되어 있습니다.</p>
+        </div>
+
+        <div class="architecture-grid">
+          <article class="architecture-copy reveal">
+            <h3>데이터 권한과<br>분석 책임을 분리합니다.</h3>
+            <p>실거래 핵심은 이용 권한이 명확한 공공 원천으로 독립 구축합니다. 아파트Me는 별도 허가 전에는 자동 수집·저장·재배포하지 않고 원문 링크와 UX 참고 범위로 제한합니다.</p>
+            <ul class="architecture-points">
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>공공 데이터 우선 수집</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>원본·정규화·파생 지표 분리</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>취소 거래와 revision 보존</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>권한 기반 파트너 어댑터</li>
+            </ul>
+            <a class="btn btn-secondary" href="https://github.com/JTech-CO/kr-apartment-market-skill#%ED%8C%A8%ED%82%A4%EC%A7%80-%EA%B5%AC%EC%A1%B0" target="_blank" rel="noopener noreferrer">저장소 구조 보기</a>
+          </article>
+
+          <div class="architecture-diagram reveal" aria-label="권장 배포 구조 인포그래픽">
+            <div class="diagram-row">
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span><strong>ChatGPT</strong><span>대화형 질의</span></span>
+              </div>
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m8 9-4 3 4 3m8-6 4 3-4 3M14 5l-4 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Codex</strong><span>개발 워크플로</span></span>
+              </div>
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 0 0-5 5v1H5v6h2v1a5 5 0 0 0 10 0v-1h2V9h-2V8a5 5 0 0 0-5-5Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 11h.01M15 11h.01M9.5 15h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                <span><strong>Other Agents</strong><span>확장 가능한 클라이언트</span></span>
+              </div>
+            </div>
+
+            <div class="diagram-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+            <div class="diagram-row single">
+              <div class="diagram-node primary">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5V5Z" stroke="currentColor" stroke-width="1.8"/><path d="M9 9h6v6H9V9Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span><strong>KR Apartment Market Skill</strong><span>활성화 · 도구 선택 · 응답 계약 · 안전 규칙</span></span>
+              </div>
+            </div>
+
+            <div class="diagram-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+            <div class="diagram-row single">
+              <div class="diagram-node accent">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 7h8m-8 5h8m-8 5h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 3h16v18H4V3Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span><strong>MCP Streamable HTTP</strong><span>14개 조회·비교·순위·관심 목록 도구</span></span>
+              </div>
+            </div>
+
+            <div class="diagram-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+            <div class="diagram-row">
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                <span><strong>Data Adapter</strong><span>공공 원천·승인 파트너</span></span>
+              </div>
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 18 9 12l4 3 7-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span><strong>Metric Engine</strong><span>버전 고정 산식</span></span>
+              </div>
+              <div class="diagram-node">
+                <span class="diagram-icon"><svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="5" rx="7" ry="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 5v7c0 1.7 3.1 3 7 3s7-1.3 7-3V5M5 12v7c0 1.7 3.1 3 7 3s7-1.3 7-3v-7" stroke="currentColor" stroke-width="1.8"/></svg></span>
+                <span><strong>PostgreSQL</strong><span>원본·revision·지표</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="principles">
+      <div class="container">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Trust by design</p>
+            <h2>답변의 문장보다,<br>답변이 만들어지는 규칙을 설계합니다.</h2>
+          </div>
+          <p>부동산 데이터는 신고 지연, 취소, 면적 혼합과 표본 부족으로 쉽게 왜곡됩니다. 이 프로젝트는 그러한 한계를 숨기지 않는 것을 기본 동작으로 삼습니다.</p>
+        </div>
+
+        <div class="principle-grid">
+          <article class="principle-card reveal">
+            <span class="principle-label">Freshness</span>
+            <h3>“최신”의 시각을 표시합니다.</h3>
+            <p>계약일, 원천 데이터 갱신 시각, 시스템 수집 시각을 구분해 사용자가 데이터의 시간 기준을 확인할 수 있게 합니다.</p>
+          </article>
+          <article class="principle-card reveal">
+            <span class="principle-label">Comparability</span>
+            <h3>비교 기준을 맞춥니다.</h3>
+            <p>동일 전용면적, 동일 기간, 동일 필터와 산식 버전으로 비교하며 서로 다른 평형을 임의로 한 지표에 섞지 않습니다.</p>
+          </article>
+          <article class="principle-card reveal">
+            <span class="principle-label">Boundaries</span>
+            <h3>분석과 권유를 구분합니다.</h3>
+            <p>가격 상승이나 수익을 보장하지 않으며, 투자·감정평가·대출 승인·세무 판단을 확정하는 서비스로 표현하지 않습니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <div class="cta-copy">
+            <h2>한국 아파트 데이터에<br>설명 가능한 AI 인터페이스를 더해보십시오.</h2>
+            <p>저장소에서 PRD, MCP 도구 명세, 완성형 SKILL.md, PostgreSQL 스키마와 평가 세트를 확인할 수 있습니다.</p>
+          </div>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="https://github.com/JTech-CO/kr-apartment-market-skill" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .8A11.4 11.4 0 0 0 8.4 23c.6.1.8-.3.8-.6v-2.2c-3.4.7-4.1-1.4-4.1-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.6.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C15.8 4.7 16.8 5 16.8 5c.6 1.5.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.8 5.4-5.5 5.7.4.4.8 1.1.8 2.1v3.4c0 .4.2.7.8.6A11.4 11.4 0 0 0 12 .8Z"/></svg>
+              저장소 열기
+            </a>
+            <button class="btn btn-secondary" type="button" data-share>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8.7 12.8 15.4 16.7M15.4 7.3 8.7 11.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="6.5" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="18" r="2.5" stroke="currentColor" stroke-width="1.8"/></svg>
+              소개 페이지 공유
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M5 26V13h6V8h9v7h7v11H5Z" fill="currentColor"/><path d="M9 17h3M9 21h3M15 12h3M15 17h3M15 21h3M22 19h2M22 23h2" stroke="#0b0d10" stroke-width="1.7"/></svg></span>
+        <span>KR Apartment Market AI Skill</span>
+      </div>
+      <div class="footer-links">
+        <span>MIT License · © <span id="year">2026</span> JTech-CO</span>
+        <a href="https://github.com/JTech-CO/kr-apartment-market-skill/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a>
+        <a href="https://github.com/JTech-CO/kr-apartment-market-skill" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">페이지 주소를 복사했습니다.</div>
+
+  <script>
+    (() => {
+      const header = document.getElementById('siteHeader');
+      const year = document.getElementById('year');
+      const toast = document.getElementById('toast');
+      const shareButtons = document.querySelectorAll('[data-share]');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      year.textContent = String(new Date().getFullYear());
+
+      const syncHeader = () => {
+        header.classList.toggle('is-scrolled', window.scrollY > 8);
+      };
+      syncHeader();
+      window.addEventListener('scroll', syncHeader, { passive: true });
+
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add('is-visible');
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.classList.remove('is-visible'), 2200);
+      };
+
+      shareButtons.forEach((button) => {
+        button.addEventListener('click', async () => {
+          const shareData = {
+            title: 'KR Apartment Market AI Skill',
+            text: '한국 아파트 시장을 AI가 최신 신고 데이터와 근거 지표로 읽도록 만드는 오픈소스 Skill + MCP 패키지',
+            url: window.location.href
+          };
+
+          try {
+            if (navigator.share) {
+              await navigator.share(shareData);
+            } else {
+              await navigator.clipboard.writeText(shareData.url);
+              showToast('페이지 주소를 복사했습니다.');
+            }
+          } catch (error) {
+            if (error && error.name === 'AbortError') return;
+            try {
+              await navigator.clipboard.writeText(shareData.url);
+              showToast('페이지 주소를 복사했습니다.');
+            } catch (_) {
+              showToast('브라우저 주소창의 URL을 복사해 주세요.');
+            }
+          }
+        });
+      });
+
+      const revealItems = document.querySelectorAll('.reveal');
+      if (reducedMotion || !('IntersectionObserver' in window)) {
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        revealItems.forEach((item) => observer.observe(item));
+      }
+    })();
+  </script>
+</body>
+</html>
