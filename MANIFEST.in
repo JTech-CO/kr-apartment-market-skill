@@ -1,0 +1,8 @@
+include LICENSE
+include THIRD_PARTY_NOTICES.md
+recursive-include licenses *
+recursive-include src/kr_apartment_market/resources *
+recursive-include src/real_estate/resources *
+include src/real_estate/LICENSE
+recursive-include docs *.md
+recursive-include references *.md
