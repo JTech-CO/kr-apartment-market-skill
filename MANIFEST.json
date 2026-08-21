@@ -1,86 +1,406 @@
 {
-  "package": "kr-apartment-market-skill",
-  "manifestVersion": "1.0",
+  "manifestVersion": "2.0.0",
+  "fileCount": 81,
   "files": [
     {
+      "path": ".env.example",
+      "size": 417,
+      "sha256": "6d573117bda2c6bfee085a829e74cd4451342a8df7516c86cabc59fc5181fc03"
+    },
+    {
+      "path": ".gitignore",
+      "size": 124,
+      "sha256": "d6188964cffc1155155fbb753e34f29444f94a7e63c3e6530ef4fff1726ac6c3"
+    },
+    {
+      "path": ".mcp.json",
+      "size": 280,
+      "sha256": "15b2e6b81e433fa911f0c6926d9a5cddc0ff888a62ff683000234fa30499025c"
+    },
+    {
+      "path": ".python-version",
+      "size": 5,
+      "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d"
+    },
+    {
+      "path": "LICENSE",
+      "size": 1065,
+      "sha256": "42b9489a4a1cadfbce3b6f715c8b5942534ddeca5ddea3429ab21dda41d5f911"
+    },
+    {
+      "path": "MANIFEST.in",
+      "size": 270,
+      "sha256": "259be551be66bbd8112cd293a37b9464c6eb5652403121fa3d572a3b87007f6b"
+    },
+    {
       "path": "MCP_TOOL_SPEC.md",
-      "bytes": 31935,
-      "sha256": "ff03a8fcd68893f644f65f84f4951e0242c17d92329c14c18e4928dd122269b9"
+      "size": 7465,
+      "sha256": "4d8376b75d2e127a61a9221e67dc3d156c81141f7797787139cf143300e17a01"
+    },
+    {
+      "path": "Makefile",
+      "size": 342,
+      "sha256": "793decf6ef926387e46e9c31c9a36bfc729c8f662358d933217ed41dbff1c753"
     },
     {
       "path": "PRD.md",
-      "bytes": 38640,
-      "sha256": "fdff99b5a669198c568923e711e246b67fed7fcf989d20414295615e05ca2dce"
+      "size": 11422,
+      "sha256": "fea8ed60f00161700a715ed3ff70e7dbd9325fa4715eec83a349bb2c668ded14"
     },
     {
       "path": "README.md",
-      "bytes": 4533,
-      "sha256": "accb96a38350f34fd7a65ff253268cbf06233e84303a134304078d5a94f6898d"
+      "size": 10136,
+      "sha256": "c01f1f7224daab46d313a5c2789391f271f8f0a7a3f53e774291fbdc8991c065"
+    },
+    {
+      "path": "RELEASE_NOTES-v2.0.0.md",
+      "size": 1408,
+      "sha256": "d4c1ea5359dc3abad5e2988284e4e22f49830981e71b408aaa60449ff54faa8f"
     },
     {
       "path": "SKILL.md",
-      "bytes": 17044,
-      "sha256": "be9d6f3177d5db88518430ad5740609e3a51525043d7eefaf2dce624407f8f0a"
+      "size": 7879,
+      "sha256": "4355411632aec2774463f8486496f9dc4f8eeaec4844e92dde3aab2dcc5031d7"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "size": 961,
+      "sha256": "2e743605f5387023f3f85848a784950d0d9be9f16eb59cf62d827f57a1b4f6e8"
     },
     {
       "path": "VALIDATION.md",
-      "bytes": 4956,
-      "sha256": "c8a96fdbcc74ea8d5ea9fed2d1f1ad00b0de28ad8ea0b5d637ff6a7483cd04e8"
+      "size": 1994,
+      "sha256": "36aaf380e0bc275e7e4afd8963bbdb7b29b7910967eb96d03025feb0bcf1c738"
+    },
+    {
+      "path": "VALIDATION_REPORT.md",
+      "size": 994,
+      "sha256": "e97dddf52d239e1ac59c435a37924e34d3d296318d94465c7f3e9f40aea3b41d"
+    },
+    {
+      "path": "agents/local-mcp.example.json",
+      "size": 395,
+      "sha256": "b73cac79da7d9bf628cf0ef0f9e710790ae650e0cf74562c15724176baa7b903"
     },
     {
       "path": "agents/openai.yaml",
-      "bytes": 942,
-      "sha256": "7bc113073b703ccb5fd85c9c2c7a25b71856e641417e9e14e333a351d4a5c736"
+      "size": 1000,
+      "sha256": "884205dacf4c2690d01382cb7c28e5507bffe626d468aba14c05de903efa2ca6"
     },
     {
       "path": "database/DATABASE_SCHEMA.md",
-      "bytes": 16815,
+      "size": 16815,
       "sha256": "dd69e0c74c92db58d640446de7b384d7cad6fd2f4ce43d55f7cff972778448d9"
     },
     {
+      "path": "database/migrations/002_real_estate_mcp_integration.sql",
+      "size": 1498,
+      "sha256": "3f4998dab2c30d18d1fd9785f8eb9e28c51828a15777378b99b06e4f3d0a8bf3"
+    },
+    {
       "path": "database/schema.sql",
-      "bytes": 61746,
+      "size": 61746,
       "sha256": "71a0c060c66e3fa430b982d5e1302525f1cd786ed2b88439cbd49fdab6ec859c"
     },
     {
       "path": "database/seed.sql",
-      "bytes": 15340,
+      "size": 15340,
       "sha256": "763c6f0eb1bd613a2bc42569526a43eea7070518d82020808da70071fa5093d0"
     },
     {
+      "path": "docker/Dockerfile",
+      "size": 278,
+      "sha256": "26889a7c407dfeecb9e4d73c72af1bcbc2edfb34c3beefc6949071600f51dae2"
+    },
+    {
+      "path": "docker-compose.yml",
+      "size": 223,
+      "sha256": "1f459d5d737940b5c69a7d0b00ee61588380f5202a6c7c5074b79e31ec6eadd0"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "size": 1093,
+      "sha256": "74836bb3c149158b931b9a24cccde2a8332066ecd75d6d5456e09c39c9aacaae"
+    },
+    {
+      "path": "docs/MIGRATION_v1_TO_v2.md",
+      "size": 1006,
+      "sha256": "2d6d7a9ac6d5b83760406dffa8481b1818afb69d57ff47d247847a2ec6aa4401"
+    },
+    {
+      "path": "docs/REAL_ESTATE_MCP_INTEGRATION.md",
+      "size": 3268,
+      "sha256": "43971f388f9baa443b37488f362a928bc5af13ab78f4576b84c2ae42775ec4e5"
+    },
+    {
+      "path": "docs/TOOL_CATALOG.md",
+      "size": 1363,
+      "sha256": "d85f452e1609dc01dd0f73771ead83e272439afc5096055ae5aa36acf9cc17a2"
+    },
+    {
       "path": "evals/golden-prompts.yaml",
-      "bytes": 19908,
+      "size": 19908,
       "sha256": "6dd796922b7739bfbaba1f3e26b713d54cdb64594f245bd47d834ba75a37a159"
     },
     {
+      "path": "images/logo.png",
+      "size": 909995,
+      "sha256": "4827deaa508ca431c3bacf56a173246dabbf64c17b46b4068a9bfae51bb40045"
+    },
+    {
+      "path": "index.html",
+      "size": 77311,
+      "sha256": "a6644af614f9e5b39103a2321db8fd0cf39d680ab16462b341b2141f80a41d39"
+    },
+    {
+      "path": "licenses/real-estate-mcp-MIT.txt",
+      "size": 1070,
+      "sha256": "b9474c46a17cb5e792990b60ea4248e52c823f83779a6e93186d9e3202394870"
+    },
+    {
+      "path": "licenses/real-estate-mcp-UPSTREAM_COMMIT.txt",
+      "size": 231,
+      "sha256": "281d01f3f732a095f28ebed7db6cf094e35a0b260d9f7a2cbc07511a4fd72c30"
+    },
+    {
       "path": "mcp/tool-definitions.json",
-      "bytes": 318901,
-      "sha256": "f5aca65d0fc18b7e88c4a53c04d01399f5b79bcf459e927cccf7a14ed81cfd9a"
+      "size": 33341,
+      "sha256": "ae1011de6bb646b05aad1320e9e6a7f3b1b8f0960ff4b7e60f8fdd6c70c7fd22"
+    },
+    {
+      "path": "pyproject.toml",
+      "size": 1924,
+      "sha256": "a44a7ae48ecfa6707a8a6b578d87784178ce46f059bc6f1d279eec8234a48c27"
     },
     {
       "path": "references/DATA_SOURCES.md",
-      "bytes": 10052,
+      "size": 10052,
       "sha256": "2d0adca03ad0b74cfb2f9e6524c2bc07d53775bf74ff90f90426884bd2822e45"
     },
     {
       "path": "references/METRIC_DEFINITIONS.md",
-      "bytes": 10016,
+      "size": 10016,
       "sha256": "91de77e3ca01cde68947019ae6d461a3149e17f5ca0ce3ef8f16a8513dd8ded4"
     },
     {
       "path": "references/OUTPUT_CONTRACT.md",
-      "bytes": 8356,
+      "size": 8356,
       "sha256": "481d1edcdf1bc51aaee8a8e8df2afad2c0f8bd1d46b488301f6ccac1cb08fb4c"
     },
     {
       "path": "references/SAFETY_AND_ACCESS_POLICY.md",
-      "bytes": 7431,
+      "size": 7431,
       "sha256": "2012e0b8093a21728d117b0d51da80032b3a83f4d40ff91ec3d0d81c232da5f3"
     },
     {
+      "path": "scripts/generate_tool_catalog.py",
+      "size": 9714,
+      "sha256": "3fdc5e2281a3872d04d50683550ec78bb5d4aefe97a2980d9d9ccb9722c89ee6"
+    },
+    {
+      "path": "scripts/update_region_codes.py",
+      "size": 1434,
+      "sha256": "3e664d79b417e7d98c1a58e3cbcdcfd73b367fb065e3711cb3debe2b3b03e41a"
+    },
+    {
       "path": "scripts/validate_package.py",
-      "bytes": 21029,
+      "size": 5380,
+      "sha256": "4d49a9d3c7882901fe6e8b7dbab96ca2db5a903078f3d4f782bbec63ffce24a4"
+    },
+    {
+      "path": "scripts/validate_package_v1.py",
+      "size": 21029,
       "sha256": "904e94e09e5016fa5228d1b1851c925eeb121a5e237106ad9c728c7e4bd7ac3f"
+    },
+    {
+      "path": "scripts/validate_runtime.py",
+      "size": 564,
+      "sha256": "71371db17e5ed14dcb7e904b5c08b5e801b8b37972da59b543774e7deb2f0ce0"
+    },
+    {
+      "path": "src/kr_apartment_market/__init__.py",
+      "size": 150,
+      "sha256": "bfe8b0b944934923cfe671f463cd4992a0274e07aae901c8c7ea8346b6c1dbfc"
+    },
+    {
+      "path": "src/kr_apartment_market/config.py",
+      "size": 2118,
+      "sha256": "a3c0014c34fe62c1459203df0ecaf4b43a14f7875140a960091701973314deb2"
+    },
+    {
+      "path": "src/kr_apartment_market/data/__init__.py",
+      "size": 310,
+      "sha256": "a7984cd0564af41811eb1a61f3a551c2b3fe3700f2399e520c5c24971374db54"
+    },
+    {
+      "path": "src/kr_apartment_market/data/public_data.py",
+      "size": 14500,
+      "sha256": "0037251c1798d60ad341c550414f07bc33bfb5dd37969c1279379c12e44f5501"
+    },
+    {
+      "path": "src/kr_apartment_market/data/regions.py",
+      "size": 3136,
+      "sha256": "5a12b9cc0741d38ef02f3d1c3586de595c52835d0c7be32259f7b5b556292fdf"
+    },
+    {
+      "path": "src/kr_apartment_market/mcp_compat.py",
+      "size": 1252,
+      "sha256": "d8cadf94df70308a92ad9ed7ea8ec320f888fddfa6b0e660317a5cc52f2002d7"
+    },
+    {
+      "path": "src/kr_apartment_market/models.py",
+      "size": 1415,
+      "sha256": "c953eb2a3e62bfe862138b8084dc2978caeecafe4231701f4e7cc2532c6a9e4a"
+    },
+    {
+      "path": "src/kr_apartment_market/resources/region_codes.tsv",
+      "size": 7960,
+      "sha256": "91f6f7d2d78a84923b57acea1bff429985c330c5d3c641040280790dd61d6223"
+    },
+    {
+      "path": "src/kr_apartment_market/server.py",
+      "size": 3169,
+      "sha256": "0c342fb820436083934159523b5eba8a8c340a3e05fca5a31c3317fe21ac78d1"
+    },
+    {
+      "path": "src/kr_apartment_market/services/__init__.py",
+      "size": 638,
+      "sha256": "098623846f1ea6ffdf686719fabd7e23d5e122f74ef53ab6f3a42efc9bc77d10"
+    },
+    {
+      "path": "src/kr_apartment_market/services/finance.py",
+      "size": 3850,
+      "sha256": "565403333bb5e139796da55363ec4500dd0846c6530915ed19874ebb7ff383ed"
+    },
+    {
+      "path": "src/kr_apartment_market/services/metrics.py",
+      "size": 9247,
+      "sha256": "ad2168eeba8ef9cf909e585cd9858d03d8e72c015412d2a98fa4494822e4c39d"
+    },
+    {
+      "path": "src/kr_apartment_market/services/watchlist.py",
+      "size": 3752,
+      "sha256": "a3993681a8abe120344fce2df13947683aeba22c348751520f6a13a3f3adde44"
+    },
+    {
+      "path": "src/kr_apartment_market/tools/__init__.py",
+      "size": 118,
+      "sha256": "3e3913fdef5435a9c25db4b6dc132ea694754634d6d5b2f1f7c14b5c537aa22f"
+    },
+    {
+      "path": "src/kr_apartment_market/tools/canonical.py",
+      "size": 23317,
+      "sha256": "6d22f49fc79db63c3da0d08c16d5be910592cb8426087f38df100f5e16d1ead3"
+    },
+    {
+      "path": "src/kr_apartment_market/utils.py",
+      "size": 2638,
+      "sha256": "24e1d99f0c4c1bd3d3074882c7c2068896831bc843f06e4a8b85c51f5d8a9fb8"
+    },
+    {
+      "path": "src/real_estate/LICENSE",
+      "size": 1070,
+      "sha256": "b9474c46a17cb5e792990b60ea4248e52c823f83779a6e93186d9e3202394870"
+    },
+    {
+      "path": "src/real_estate/__init__.py",
+      "size": 194,
+      "sha256": "a51bd69ebf0dee9d1a1cc4a85a4ad377c8ec5c4e3f31dd0bbe373dcbae879b5d"
+    },
+    {
+      "path": "src/real_estate/mcp_server/__init__.py",
+      "size": 141,
+      "sha256": "7c20ec5596fabd9badb39b3b94864272bdaf3c8db8a34c37da7b7c94ffe55567"
+    },
+    {
+      "path": "src/real_estate/mcp_server/_helpers.py",
+      "size": 2035,
+      "sha256": "dc6b43ad7277e492480f51f8ae3c3a32755bec56679fc49c51df810c5e7ae220"
+    },
+    {
+      "path": "src/real_estate/mcp_server/_region.py",
+      "size": 794,
+      "sha256": "30b51093e559d0ddab36f3e5d5d619a733ec4245a84968ab7fed477b73a3d5bd"
+    },
+    {
+      "path": "src/real_estate/mcp_server/parsers/__init__.py",
+      "size": 33,
+      "sha256": "e419606f81a49ec0110a9bf93439afd2fa5ce4df0185096b78e278ff8f8eeafd"
+    },
+    {
+      "path": "src/real_estate/mcp_server/parsers/rent.py",
+      "size": 2458,
+      "sha256": "94118312e00f8779deb5d6c1285ff0a865812276857b2ff0ffed69199e0932f4"
+    },
+    {
+      "path": "src/real_estate/mcp_server/parsers/trade.py",
+      "size": 3449,
+      "sha256": "c3bd7a30bd45bbc0de8122b28c0edf9942a81644ae881b5609087338aa865451"
+    },
+    {
+      "path": "src/real_estate/mcp_server/server.py",
+      "size": 1178,
+      "sha256": "4088f651b5ea15f945e48d76068bbf5cd1e7857311d7a04743be6395ce359f9f"
+    },
+    {
+      "path": "src/real_estate/mcp_server/tools/__init__.py",
+      "size": 1384,
+      "sha256": "2389ad00ae61a697bce18494b8d302016bf053042b89b32d156ac6f987c0586c"
+    },
+    {
+      "path": "src/real_estate/mcp_server/tools/finance.py",
+      "size": 2241,
+      "sha256": "de08228466fe37ca8facbb3b170ab2fe17a026d16d3f15705a46a4f2b1ec97f6"
+    },
+    {
+      "path": "src/real_estate/mcp_server/tools/rent.py",
+      "size": 2631,
+      "sha256": "471db08fd97e8dfe45b5e86b7a62504c4150077ac86d599736a60f10fc28e3dd"
+    },
+    {
+      "path": "src/real_estate/mcp_server/tools/subscription.py",
+      "size": 4962,
+      "sha256": "aa0d6d186d4d17ee9ba38e067b7e1f4a60a1b5713e639b9708f4ec96e89aa224"
+    },
+    {
+      "path": "src/real_estate/mcp_server/tools/trade.py",
+      "size": 3274,
+      "sha256": "ebae26e58933eb9065e0bb94718e0fba0373140ab61e78741b6fd4dee894dc0a"
+    },
+    {
+      "path": "src/real_estate/resources/region_codes.txt",
+      "size": 10992,
+      "sha256": "ca47fad4514db8342f74d1b1987eeaf8c6756ea0d0a3b7eefd7fffa4de32cbf3"
+    },
+    {
+      "path": "tests/runtime/test_finance.py",
+      "size": 599,
+      "sha256": "2197519aa71cc14d34033051c48aae0e1ada93274ddfdc59fce946276511f185"
+    },
+    {
+      "path": "tests/runtime/test_metrics.py",
+      "size": 2298,
+      "sha256": "999f78995090bda14b3d27a58c838ac2647483db5a749c05eb2f2f8386451640"
+    },
+    {
+      "path": "tests/runtime/test_parsers.py",
+      "size": 2056,
+      "sha256": "d0cd6589ca7b6406d5b5f95072202b31398e3156ca8acdbda6ea735d4da3f0bb"
+    },
+    {
+      "path": "tests/runtime/test_regions.py",
+      "size": 617,
+      "sha256": "bd7d861a7f4cf5c7430628b43d7c848639fd6633ed84237dac9d4059d85950dd"
+    },
+    {
+      "path": "tests/runtime/test_server.py",
+      "size": 1061,
+      "sha256": "20a77ff0f22c1947ca61ebf2fbdd58e9b96dcc872533bd9e1faeddf59c6ca60a"
+    },
+    {
+      "path": "tests/runtime/test_watchlist.py",
+      "size": 480,
+      "sha256": "7459cf9f3a9c4de4f91b433e177edf508255a7b45d1270c1422a951b21ca2908"
     }
   ]
 }

@@ -1,0 +1,4 @@
+Upstream repository: https://github.com/tae0y/real-estate-mcp
+Integrated snapshot commit: 1119eb1069d1b1bae15f7b38c6c0268fe07995c0
+License: MIT
+Integration form: adapted/vendored compatibility implementation inside this repository

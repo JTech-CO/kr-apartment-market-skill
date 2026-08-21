@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "kr-apartment-market": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/absolute/path/to/kr-apartment-market-skill",
+        "kr-apartment-market",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "DATA_GO_KR_API_KEY": "your-service-key",
+        "ODCLOUD_API_KEY": "optional-odcloud-key"
+      }
+    }
+  }
+}
