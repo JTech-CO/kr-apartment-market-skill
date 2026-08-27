@@ -84,3 +84,20 @@ MCP input
 ## 라이선스
 
 MIT는 복사·수정·병합·배포·재라이선스·판매를 허용하지만, 원 저작권 및 허가 고지를 소프트웨어의 상당 부분에 포함해야 합니다. 따라서 원본 라이선스 파일을 삭제하거나 JTech_CO 단독 저작물처럼 표시해서는 안 됩니다.
+
+
+## v3.0.0 확장
+
+v3.0.0은 위 canonical 시장 분석 계층 위에 `src/kr_apartment_market/home/`을 추가합니다. Home Finder는 vendored 호환 도구를 직접 조합하지 않고 canonical `PublicDataClient`, normalized `Transaction`, metric service를 재사용합니다.
+
+```text
+public data adapter
+→ normalized transactions
+→ existing market metrics
+→ candidate facts
+→ hard constraints
+→ deterministic scoring
+→ original-platform listing links
+```
+
+따라서 사용자는 `real-estate-mcp`를 별도로 설치하지 않으며, 신규 Home Finder 클라이언트도 `kr_home.*`만 호출하면 됩니다.

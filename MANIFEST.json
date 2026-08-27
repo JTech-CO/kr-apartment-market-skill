@@ -1,11 +1,12 @@
 {
-  "manifestVersion": "2.0.0",
-  "fileCount": 81,
+  "manifestVersion": "3.0.0",
+  "generatedBy": "scripts/validate_package.py",
+  "fileCount": 106,
   "files": [
     {
       "path": ".env.example",
-      "size": 417,
-      "sha256": "6d573117bda2c6bfee085a829e74cd4451342a8df7516c86cabc59fc5181fc03"
+      "size": 643,
+      "sha256": "558ef0aeab109234aa05aba82da34e68b47d24ef3642b3cc69eb483502bda3d4"
     },
     {
       "path": ".gitignore",
@@ -14,8 +15,8 @@
     },
     {
       "path": ".mcp.json",
-      "size": 280,
-      "sha256": "15b2e6b81e433fa911f0c6926d9a5cddc0ff888a62ff683000234fa30499025c"
+      "size": 546,
+      "sha256": "2ed5f012d8b05711c99507307b9d77e18cfcc73d3853b2a58bf9ab86e66bb0f8"
     },
     {
       "path": ".python-version",
@@ -29,13 +30,13 @@
     },
     {
       "path": "MANIFEST.in",
-      "size": 270,
-      "sha256": "259be551be66bbd8112cd293a37b9464c6eb5652403121fa3d572a3b87007f6b"
+      "size": 746,
+      "sha256": "ed830ae8ab60a6a4eb07f7430a289640317377f40c7e05a8490fb651cd39c743"
     },
     {
       "path": "MCP_TOOL_SPEC.md",
-      "size": 7465,
-      "sha256": "4d8376b75d2e127a61a9221e67dc3d156c81141f7797787139cf143300e17a01"
+      "size": 9707,
+      "sha256": "d261f3f6d76386a89c21038aea18353cc07c2f583fc1448fe965a2b8e71664f4"
     },
     {
       "path": "Makefile",
@@ -44,13 +45,13 @@
     },
     {
       "path": "PRD.md",
-      "size": 11422,
-      "sha256": "fea8ed60f00161700a715ed3ff70e7dbd9325fa4715eec83a349bb2c668ded14"
+      "size": 17019,
+      "sha256": "084e42c3ae37539ed780eba25cc3dca151bbc3e556c9c51330612609526e02ab"
     },
     {
       "path": "README.md",
-      "size": 10136,
-      "sha256": "c01f1f7224daab46d313a5c2789391f271f8f0a7a3f53e774291fbdc8991c065"
+      "size": 11070,
+      "sha256": "db29e0949e279c158287868ab1e2b9c5aa8291e963806d690c1a02b98a7c4649"
     },
     {
       "path": "RELEASE_NOTES-v2.0.0.md",
@@ -58,9 +59,14 @@
       "sha256": "d4c1ea5359dc3abad5e2988284e4e22f49830981e71b408aaa60449ff54faa8f"
     },
     {
+      "path": "RELEASE_NOTES-v3.0.0.md",
+      "size": 3082,
+      "sha256": "52fa9ce99ca804a6b81f48ad4c0aeac61d5fdbaeb2f99c154e8b30f8d2f8a222"
+    },
+    {
       "path": "SKILL.md",
-      "size": 7879,
-      "sha256": "4355411632aec2774463f8486496f9dc4f8eeaec4844e92dde3aab2dcc5031d7"
+      "size": 12316,
+      "sha256": "48ad99f16149b60edb2df7189141374230a83cd5f542c34879e69ca38a032df9"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -69,28 +75,28 @@
     },
     {
       "path": "VALIDATION.md",
-      "size": 1994,
-      "sha256": "36aaf380e0bc275e7e4afd8963bbdb7b29b7910967eb96d03025feb0bcf1c738"
+      "size": 2929,
+      "sha256": "04b8e6d5ad4e31f90442055875e8f0ae5baf2d9e906b586ab5b3cc2fd83aa256"
     },
     {
       "path": "VALIDATION_REPORT.md",
-      "size": 994,
-      "sha256": "e97dddf52d239e1ac59c435a37924e34d3d296318d94465c7f3e9f40aea3b41d"
+      "size": 3615,
+      "sha256": "14c122ab12fc26ddbb63e4e8399e4557ded5bc9f09a693c3e3d1d54f7a15362d"
     },
     {
       "path": "agents/local-mcp.example.json",
-      "size": 395,
-      "sha256": "b73cac79da7d9bf628cf0ef0f9e710790ae650e0cf74562c15724176baa7b903"
+      "size": 546,
+      "sha256": "2ed5f012d8b05711c99507307b9d77e18cfcc73d3853b2a58bf9ab86e66bb0f8"
     },
     {
       "path": "agents/openai.yaml",
-      "size": 1000,
-      "sha256": "884205dacf4c2690d01382cb7c28e5507bffe626d468aba14c05de903efa2ca6"
+      "size": 1224,
+      "sha256": "bde3650db389880c5ae24ece0d18ab7e2e3e429cefe620198baf6bad1eef8275"
     },
     {
       "path": "database/DATABASE_SCHEMA.md",
-      "size": 16815,
-      "sha256": "dd69e0c74c92db58d640446de7b384d7cad6fd2f4ce43d55f7cff972778448d9"
+      "size": 6690,
+      "sha256": "652b9004a2f8e6c2d26bb722a08076f397d9b5270ddacb076f47260402425f13"
     },
     {
       "path": "database/migrations/002_real_estate_mcp_integration.sql",
@@ -98,9 +104,14 @@
       "sha256": "3f4998dab2c30d18d1fd9785f8eb9e28c51828a15777378b99b06e4f3d0a8bf3"
     },
     {
+      "path": "database/migrations/003_home_finder.sql",
+      "size": 28777,
+      "sha256": "80123a03bff2bec88f172a4a719a04962a118d4afefa50de9b3997aed47d692c"
+    },
+    {
       "path": "database/schema.sql",
-      "size": 61746,
-      "sha256": "71a0c060c66e3fa430b982d5e1302525f1cd786ed2b88439cbd49fdab6ec859c"
+      "size": 90712,
+      "sha256": "8597821ba8e155dad5810144b4fe1104d81f3750081d1351dabb8ac7ca29d00d"
     },
     {
       "path": "database/seed.sql",
@@ -119,8 +130,18 @@
     },
     {
       "path": "docs/ARCHITECTURE.md",
-      "size": 1093,
-      "sha256": "74836bb3c149158b931b9a24cccde2a8332066ecd75d6d5456e09c39c9aacaae"
+      "size": 1287,
+      "sha256": "98c0240a5b3eee9d306b1f50df14f3004852d3710a661fc0e00d409bd2035063"
+    },
+    {
+      "path": "docs/HOME_FINDER_ARCHITECTURE.md",
+      "size": 10340,
+      "sha256": "aaa625c6a14c33006ab3b484259f9ed42bdbf9c80d906aee81c1ea3e9a26943b"
+    },
+    {
+      "path": "docs/LISTING_SOURCE_POLICY.md",
+      "size": 4479,
+      "sha256": "671fa23ea655f4f8de262cfc990da9164469f39a289be9c72296b09aa4abfe3d"
     },
     {
       "path": "docs/MIGRATION_v1_TO_v2.md",
@@ -128,19 +149,34 @@
       "sha256": "2d6d7a9ac6d5b83760406dffa8481b1818afb69d57ff47d247847a2ec6aa4401"
     },
     {
+      "path": "docs/MIGRATION_v2_TO_v3.md",
+      "size": 2194,
+      "sha256": "aee07233c333a36bc6984606d74b785b740d58bdf0d358a44e452aa9e4deb655"
+    },
+    {
       "path": "docs/REAL_ESTATE_MCP_INTEGRATION.md",
-      "size": 3268,
-      "sha256": "43971f388f9baa443b37488f362a928bc5af13ab78f4576b84c2ae42775ec4e5"
+      "size": 3902,
+      "sha256": "d278aef1cc7e23aaf1ba131ff6c4dcbccf4bf2d17a9c49d646602b70ae328a74"
+    },
+    {
+      "path": "docs/SCORING_MODEL.md",
+      "size": 5478,
+      "sha256": "b97b99ab82b933162f27364ff63e75eee5f2f4a6fa09e4b2db0ef376878ad2fa"
     },
     {
       "path": "docs/TOOL_CATALOG.md",
-      "size": 1363,
-      "sha256": "d85f452e1609dc01dd0f73771ead83e272439afc5096055ae5aa36acf9cc17a2"
+      "size": 5671,
+      "sha256": "4e66c73d65d94f82e1cc17d5456983082d59b8a5eb42a4f1c2969d7a8b205803"
     },
     {
       "path": "evals/golden-prompts.yaml",
       "size": 19908,
       "sha256": "6dd796922b7739bfbaba1f3e26b713d54cdb64594f245bd47d834ba75a37a159"
+    },
+    {
+      "path": "evals/home-finder-prompts.yaml",
+      "size": 8678,
+      "sha256": "70b2ab3df75251c20066fd35366f9d51c6d39c0ea6c0ab77931b5192733bf91b"
     },
     {
       "path": "images/logo.png",
@@ -149,8 +185,8 @@
     },
     {
       "path": "index.html",
-      "size": 77311,
-      "sha256": "a6644af614f9e5b39103a2321db8fd0cf39d680ab16462b341b2141f80a41d39"
+      "size": 31769,
+      "sha256": "4378e43e46899dae679092455625662e005fec2ca21d2ff4ad6918046dac0c30"
     },
     {
       "path": "licenses/real-estate-mcp-MIT.txt",
@@ -164,38 +200,38 @@
     },
     {
       "path": "mcp/tool-definitions.json",
-      "size": 33341,
-      "sha256": "ae1011de6bb646b05aad1320e9e6a7f3b1b8f0960ff4b7e60f8fdd6c70c7fd22"
+      "size": 59441,
+      "sha256": "94d5d3c908ceef625fc2966959fad6e89c8c1a148c19b6b71db126e1bdc6961f"
     },
     {
       "path": "pyproject.toml",
-      "size": 1924,
-      "sha256": "a44a7ae48ecfa6707a8a6b578d87784178ce46f059bc6f1d279eec8234a48c27"
+      "size": 1941,
+      "sha256": "6da53197b3b6cb7e8a65afdf6f295ee665764b9db11352a578e6467878893dee"
     },
     {
       "path": "references/DATA_SOURCES.md",
-      "size": 10052,
-      "sha256": "2d0adca03ad0b74cfb2f9e6524c2bc07d53775bf74ff90f90426884bd2822e45"
+      "size": 3139,
+      "sha256": "ee21fbe420b8effe0b1ecd86dc0dd910612bf66265a26881c47feb7bbd8ba77d"
     },
     {
       "path": "references/METRIC_DEFINITIONS.md",
-      "size": 10016,
-      "sha256": "91de77e3ca01cde68947019ae6d461a3149e17f5ca0ce3ef8f16a8513dd8ded4"
+      "size": 3385,
+      "sha256": "4dbe0f206822b20eb17212d228f21c0db4af850f3d804da2f070a840b9a0eed2"
     },
     {
       "path": "references/OUTPUT_CONTRACT.md",
-      "size": 8356,
-      "sha256": "481d1edcdf1bc51aaee8a8e8df2afad2c0f8bd1d46b488301f6ccac1cb08fb4c"
+      "size": 2038,
+      "sha256": "329385c58e3f19413c1a62b85cb1fcdacb0ea8a8ac1d487746419e210a2a9544"
     },
     {
       "path": "references/SAFETY_AND_ACCESS_POLICY.md",
-      "size": 7431,
-      "sha256": "2012e0b8093a21728d117b0d51da80032b3a83f4d40ff91ec3d0d81c232da5f3"
+      "size": 2163,
+      "sha256": "b0e66af78379fa9b312959a73eba93ed1551dc8253098c9435fdb656a415c733"
     },
     {
       "path": "scripts/generate_tool_catalog.py",
-      "size": 9714,
-      "sha256": "3fdc5e2281a3872d04d50683550ec78bb5d4aefe97a2980d9d9ccb9722c89ee6"
+      "size": 16094,
+      "sha256": "eed88c4c1859b7abe10b9d810f6b7cdd778ca738d293f48c5962308ffb6bb0a1"
     },
     {
       "path": "scripts/update_region_codes.py",
@@ -204,8 +240,8 @@
     },
     {
       "path": "scripts/validate_package.py",
-      "size": 5380,
-      "sha256": "4d49a9d3c7882901fe6e8b7dbab96ca2db5a903078f3d4f782bbec63ffce24a4"
+      "size": 14211,
+      "sha256": "00d13c99ae70a60600cb41ad6bc573060083708322df53a29b8b8e2082ceaad5"
     },
     {
       "path": "scripts/validate_package_v1.py",
@@ -220,12 +256,12 @@
     {
       "path": "src/kr_apartment_market/__init__.py",
       "size": 150,
-      "sha256": "bfe8b0b944934923cfe671f463cd4992a0274e07aae901c8c7ea8346b6c1dbfc"
+      "sha256": "450569509492288029e6f60ffb9be247b3d46209b51914d1cfe8b91e2479c524"
     },
     {
       "path": "src/kr_apartment_market/config.py",
-      "size": 2118,
-      "sha256": "a3c0014c34fe62c1459203df0ecaf4b43a14f7875140a960091701973314deb2"
+      "size": 2316,
+      "sha256": "25068bde345b7dd8f358eadc9ec7a953c6fdf0e43d97a8d192cbd021a0a7bf2f"
     },
     {
       "path": "src/kr_apartment_market/data/__init__.py",
@@ -243,6 +279,36 @@
       "sha256": "5a12b9cc0741d38ef02f3d1c3586de595c52835d0c7be32259f7b5b556292fdf"
     },
     {
+      "path": "src/kr_apartment_market/home/__init__.py",
+      "size": 253,
+      "sha256": "a54c48ff10f3e2fb71a4f6876eb6253249028d9d781e0928002507df3cf9c6fe"
+    },
+    {
+      "path": "src/kr_apartment_market/home/listing_links.py",
+      "size": 7287,
+      "sha256": "e1d25f6cfceab324634bb0614954923d4ea8b8e15db8a8b286cb8b922150f3ed"
+    },
+    {
+      "path": "src/kr_apartment_market/home/models.py",
+      "size": 16388,
+      "sha256": "71e219a981111fd2025de9a3c041b1f78f0a25960809564ed4d56854a815e84d"
+    },
+    {
+      "path": "src/kr_apartment_market/home/recommender.py",
+      "size": 13264,
+      "sha256": "4f17561e01d14b41f5afa245d87424893e27c156efe8dfce41bdce5faee7d915"
+    },
+    {
+      "path": "src/kr_apartment_market/home/scoring.py",
+      "size": 18992,
+      "sha256": "5c1bc1d3b012bd30b021a278f5ef174d51ec35eb36b4f6c00607221264859547"
+    },
+    {
+      "path": "src/kr_apartment_market/home/storage.py",
+      "size": 10845,
+      "sha256": "698d6d7b350b9a2e13b52b807f58a3cdfd85b7f034fda62c1f10aa06d08f9e4b"
+    },
+    {
       "path": "src/kr_apartment_market/mcp_compat.py",
       "size": 1252,
       "sha256": "d8cadf94df70308a92ad9ed7ea8ec320f888fddfa6b0e660317a5cc52f2002d7"
@@ -253,14 +319,19 @@
       "sha256": "c953eb2a3e62bfe862138b8084dc2978caeecafe4231701f4e7cc2532c6a9e4a"
     },
     {
+      "path": "src/kr_apartment_market/resources/listing_sources.json",
+      "size": 5400,
+      "sha256": "662c253e5c1e1a4198c32b30edea4d0f81447b3fb021a60153c659ba18042887"
+    },
+    {
       "path": "src/kr_apartment_market/resources/region_codes.tsv",
       "size": 7960,
       "sha256": "91f6f7d2d78a84923b57acea1bff429985c330c5d3c641040280790dd61d6223"
     },
     {
       "path": "src/kr_apartment_market/server.py",
-      "size": 3169,
-      "sha256": "0c342fb820436083934159523b5eba8a8c340a3e05fca5a31c3317fe21ac78d1"
+      "size": 3257,
+      "sha256": "6aec986eeee173aba3ccb112ca0a46adc274fdc1e030d1e1e22ed9fb6231e6f8"
     },
     {
       "path": "src/kr_apartment_market/services/__init__.py",
@@ -284,8 +355,8 @@
     },
     {
       "path": "src/kr_apartment_market/tools/__init__.py",
-      "size": 118,
-      "sha256": "3e3913fdef5435a9c25db4b6dc132ea694754634d6d5b2f1f7c14b5c537aa22f"
+      "size": 179,
+      "sha256": "6bb316b048be01b862e13e738e6a5fe15cdae8a586f6c360383f03434a2d0e97"
     },
     {
       "path": "src/kr_apartment_market/tools/canonical.py",
@@ -293,9 +364,44 @@
       "sha256": "6d22f49fc79db63c3da0d08c16d5be910592cb8426087f38df100f5e16d1ead3"
     },
     {
+      "path": "src/kr_apartment_market/tools/home.py",
+      "size": 16803,
+      "sha256": "4f184ffdea507efca65ac53d068a3a42302302c74b5a846c2ebcba9e11bb78ee"
+    },
+    {
       "path": "src/kr_apartment_market/utils.py",
       "size": 2638,
       "sha256": "24e1d99f0c4c1bd3d3074882c7c2068896831bc843f06e4a8b85c51f5d8a9fb8"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/PKG-INFO",
+      "size": 12449,
+      "sha256": "3785fa53f662ac1a80079ebf3770af64af5598ba973ab6618c2ba242caec5b2a"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/SOURCES.txt",
+      "size": 3367,
+      "sha256": "43846a820d17b545df5f09db0b1eb0629cad23cdd7a5b6342a846fea22ef140a"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/dependency_links.txt",
+      "size": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/entry_points.txt",
+      "size": 125,
+      "sha256": "ae33b9817efa6455eb6fd3b7abb85936c39dab905d561f8771c5a272ba3fa32b"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/requires.txt",
+      "size": 186,
+      "sha256": "fb627ad997adc8eda7166ca67c7529c6c8ad415cbfc9f8d40e6c851e6202bf38"
+    },
+    {
+      "path": "src/kr_apartment_market_skill.egg-info/top_level.txt",
+      "size": 32,
+      "sha256": "b25b82a15d620e7e2b3eec0512bf7b1d01349169f75a468f3b83c8824ed3df96"
     },
     {
       "path": "src/real_estate/LICENSE",
@@ -378,6 +484,26 @@
       "sha256": "2197519aa71cc14d34033051c48aae0e1ada93274ddfdc59fce946276511f185"
     },
     {
+      "path": "tests/runtime/test_home_profile.py",
+      "size": 1776,
+      "sha256": "d5de23ce039cd6c1b42a6f8e20819c96b763b9ba5448c9a93164acb5572d5380"
+    },
+    {
+      "path": "tests/runtime/test_home_scoring.py",
+      "size": 2516,
+      "sha256": "4c59264495942cd0436fd0eda858f1e19ae813c9656bf0f0a7d4b986ddcb918f"
+    },
+    {
+      "path": "tests/runtime/test_home_storage.py",
+      "size": 1842,
+      "sha256": "2d2cf475c9169733bcb514eb926f96801e61a503ae259a4575e5867e6ec020ee"
+    },
+    {
+      "path": "tests/runtime/test_listing_links.py",
+      "size": 1873,
+      "sha256": "421e608348dd6df7aa3ec04196f3e55d25d4be2b40de5219fd7082e213d1786e"
+    },
+    {
       "path": "tests/runtime/test_metrics.py",
       "size": 2298,
       "sha256": "999f78995090bda14b3d27a58c838ac2647483db5a749c05eb2f2f8386451640"
@@ -388,14 +514,19 @@
       "sha256": "d0cd6589ca7b6406d5b5f95072202b31398e3156ca8acdbda6ea735d4da3f0bb"
     },
     {
+      "path": "tests/runtime/test_recommender.py",
+      "size": 2661,
+      "sha256": "91beba7e58093c4b6cdea23b7b5ace1312989a29603c8d52598ba55ada558cce"
+    },
+    {
       "path": "tests/runtime/test_regions.py",
       "size": 617,
       "sha256": "bd7d861a7f4cf5c7430628b43d7c848639fd6633ed84237dac9d4059d85950dd"
     },
     {
       "path": "tests/runtime/test_server.py",
-      "size": 1061,
-      "sha256": "20a77ff0f22c1947ca61ebf2fbdd58e9b96dcc872533bd9e1faeddf59c6ca60a"
+      "size": 1111,
+      "sha256": "fa3bab5294297de786e2b5351983bf22296d0d1086a2dc1b011248e02f95c440"
     },
     {
       "path": "tests/runtime/test_watchlist.py",

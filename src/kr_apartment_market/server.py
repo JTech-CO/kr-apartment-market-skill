@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 from kr_apartment_market.config import Settings
 from kr_apartment_market.mcp_compat import FastMCP
-from kr_apartment_market.tools import register_canonical_tools
+from kr_apartment_market.tools import register_canonical_tools, register_home_tools
 
 
 def create_mcp(
@@ -24,6 +24,7 @@ def create_mcp(
     settings = settings or Settings.from_env()
     mcp = FastMCP("kr-apartment-market")
     names = register_canonical_tools(mcp, settings)
+    names.extend(register_home_tools(mcp, settings))
     use_compat = settings.enable_upstream_compat if enable_upstream_compat is None else enable_upstream_compat
     if use_compat:
         try:
@@ -74,7 +75,7 @@ def main() -> None:
     parser.add_argument(
         "--no-upstream-compat",
         action="store_true",
-        help="Expose only canonical kr_apartment.* tools",
+        help="Expose only canonical kr_apartment.* and kr_home.* tools",
     )
     parser.add_argument(
         "--list-tools",

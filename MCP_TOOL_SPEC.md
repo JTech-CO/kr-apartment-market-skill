@@ -1,232 +1,378 @@
-# KR Apartment Market MCP Tool Specification v2.0
+# MCP 도구 명세 — KR Apartment Market AI Skill v3.0.0
 
-## 1. 목적
+문서 버전: 3.0.0  
+대상 프로토콜: MCP `2026-07-28`  
+JSON Schema: Draft 2020-12  
+기본 시간대: `Asia/Seoul`
 
-이 문서는 `kr-apartment-market-skill`에 내장된 FastMCP 서버의 전송, 인증, 공통 응답, canonical 도구, vendored 호환 계층과 오류 규약을 정의합니다. 기계 판독용 스키마는 `mcp/tool-definitions.json`이 기준입니다.
+## 1. 범위
 
-## 2. 실행
+단일 FastMCP 서버가 다음을 제공합니다.
+
+```text
+kr_apartment.*  17개
+kr_home.*       15개
+--------------------
+canonical       32개
+
+vendored compatibility 16개 (선택)
+integrated total       48개
+```
+
+기계 판독 가능한 전체 입력·출력 schema는 `mcp/tool-definitions.json`이 기준입니다. 이 문서는 의미, 호출 순서, 정책과 오류 계약을 정의합니다.
+
+## 2. 전송
 
 ### stdio
 
-```bash
-kr-apartment-market --transport stdio
-```
+로컬 Claude Desktop, Codex CLI, 기타 MCP client에 권장합니다.
 
-로컬 Codex·Claude Code·데스크톱 MCP 클라이언트에 적합합니다.
+```bash
+uv run kr-apartment-market --transport stdio
+```
 
 ### Streamable HTTP
 
 ```bash
-kr-apartment-market --transport streamable-http --host 0.0.0.0 --port 8765
+uv run kr-apartment-market \
+  --transport streamable-http \
+  --host 127.0.0.1 \
+  --port 8765
 ```
 
-공개 HTTP 배포에서 애플리케이션 앞단은 다음을 제공해야 합니다.
+공개 배포에서는 TLS reverse proxy, 인증, rate limit과 origin 정책을 별도로 구성합니다.
 
-- HTTPS
-- 사용자 또는 서비스 인증
-- 요청량 제한
-- 감사 로그
-- secret redaction
-- CORS/Origin 정책
-- 관심 목록 사용자 격리
+## 3. 인증
 
-## 3. 환경 변수
+### 원천 API
 
-| 변수 | 필수 | 기본값 | 용도 |
-|---|---:|---|---|
-| `DATA_GO_KR_API_KEY` | 거래 도구 사용 시 | 없음 | 국토교통부/공공데이터포털 서비스 키 |
-| `ODCLOUD_API_KEY` | 청약 호환 도구 사용 시 | 없음 | 청약홈/ODCloud 서비스 키 |
-| `TZ` | 아니오 | Asia/Seoul | 기준 시간대 |
-| `KR_APARTMENT_HTTP_TIMEOUT` | 아니오 | 20 | 원천 호출 timeout 초 |
-| `KR_APARTMENT_RETRY_COUNT` | 아니오 | 3 | 일시 오류 재시도 |
-| `KR_APARTMENT_PAGE_SIZE` | 아니오 | 1000 | 원천 페이지 크기 |
-| `KR_APARTMENT_MAX_PAGES` | 아니오 | 50 | 요청당 페이지 상한 |
-| `KR_APARTMENT_MAX_MONTHS` | 아니오 | 60 | 요청당 월 상한 |
-| `ENABLE_REAL_ESTATE_MCP_COMPAT` | 아니오 | true | vendored upstream 도구 등록 |
-| `KR_APARTMENT_WATCHLIST_PATH` | 아니오 | 사용자 홈 아래 JSON | 로컬 관심 목록 |
+```text
+DATA_GO_KR_API_KEY
+ODCLOUD_API_KEY 또는 ODCLOUD_SERVICE_KEY
+```
 
-## 4. 공통 응답
+API key는 MCP 응답·로그·프로필 저장소에 포함하지 않습니다.
 
-canonical 도구는 다음 envelope를 반환합니다.
+### 사용자 데이터
+
+개인용 런타임은 로컬 JSON 파일을 사용합니다. 다중 사용자 운영형은 OAuth와 PostgreSQL RLS를 적용해야 합니다.
+
+## 4. 공통 응답 원칙
+
+Canonical 도구는 가능한 경우 구조화 결과를 반환하며, 다음 의미를 유지합니다.
+
+```text
+request_id        요청 추적 ID
+answered_at       응답 생성 시각
+source            데이터 원천
+source_months     조회한 계약월
+collected_at      수집 시각
+warnings          데이터 품질·부분 실패
+```
+
+`null`과 0을 구분합니다.
+
+```text
+null = 데이터 없음 또는 계산 불가
+0    = 실제 값이 0
+```
+
+## 5. 도구 그룹
+
+### 5.1 지역·거래·단지
+
+| Tool | 역할 |
+|---|---|
+| `kr_apartment.resolve_location` | 지역명·단지명 후보 해석 |
+| `kr_apartment.get_transactions` | 정규화 실거래 조회 |
+| `kr_apartment.search_complexes` | 거래 데이터 안의 단지 검색 |
+| `kr_apartment.get_complex_snapshot` | 단지 가격·거래량·전세 지표 |
+| `kr_apartment.compare_complexes` | 동일 기준 복수 단지 비교 |
+
+### 5.2 지역 시장·신호
+
+| Tool | 역할 |
+|---|---|
+| `kr_apartment.get_region_pulse` | 지역 시장 펄스 |
+| `kr_apartment.rank_complexes` | 지표별 단지 순위 |
+| `kr_apartment.get_signal_feed` | 신고가·거래 재개 등 신호 |
+| `kr_apartment.get_data_freshness` | 원천 데이터 신선도 |
+| `kr_apartment.get_source_link` | 공공·Apt2Me 등 원문 링크 |
+
+### 5.3 계산·관심 단지
+
+| Tool | 역할 |
+|---|---|
+| `kr_apartment.calculate_loan_payment` | 원리금 균등상환 계산 |
+| `kr_apartment.calculate_compound_growth` | 복리 성장 계산 |
+| `kr_apartment.calculate_monthly_cashflow` | 월 현금흐름 계산 |
+| `kr_apartment.get_watchlist` | 관심 단지 조회 |
+| `kr_apartment.upsert_watchlist_item` | 관심 단지 등록·수정 |
+| `kr_apartment.delete_watchlist_item` | 관심 단지 삭제 |
+| `kr_apartment.get_watchlist_brief` | 관심 단지 변경 브리핑 |
+
+### 5.4 Home Finder 프로필
+
+| Tool | 역할 |
+|---|---|
+| `kr_home.validate_search_profile` | 입력 조건 검증·정규화 |
+| `kr_home.create_search_profile` | 프로필 영속 저장 |
+| `kr_home.get_search_profile` | 프로필 조회 |
+| `kr_home.update_search_profile` | patch 후 전체 재검증 |
+| `kr_home.delete_search_profile` | 프로필 삭제 |
+
+### 5.5 Home Finder 추천
+
+| Tool | 역할 |
+|---|---|
+| `kr_home.recommend_complexes` | 공공 실거래 기반 후보 생성·점수화 |
+| `kr_home.explain_complex_match` | 한 후보의 점수·근거 설명 |
+| `kr_home.compare_candidates` | 복수 후보 점수 구성 비교 |
+
+### 5.6 광고매물 링크
+
+| Tool | 역할 |
+|---|---|
+| `kr_home.find_listing_links` | 원천별 공식 홈·지역·discovery 링크 생성 |
+| `kr_home.get_listing_source_capabilities` | 원천 정책·지원 유형 확인 |
+| `kr_home.inspect_listing_url` | 사용자 URL을 fetch 없이 source 분류 |
+
+### 5.7 저장 검색
+
+| Tool | 역할 |
+|---|---|
+| `kr_home.save_search` | 프로필 기반 저장 검색 생성 |
+| `kr_home.get_saved_searches` | 저장 검색 목록 |
+| `kr_home.delete_saved_search` | 저장 검색 삭제 |
+| `kr_home.get_search_updates` | 새 추천 실행과 이전 결과 diff |
+
+## 6. Home Finder 핵심 계약
+
+### 6.1 Search Profile
+
+최소 입력 예:
 
 ```json
 {
-  "answered_at": "2026-08-21T19:00:00+09:00",
-  "timezone": "Asia/Seoul",
-  "data": {},
-  "sources": [
-    {
-      "source": "국토교통부 실거래가 공개 API",
-      "provider": "국토교통부/공공데이터포털",
-      "lawd_code": "11680",
-      "deal_months": ["202607", "202608"],
-      "access": "API"
-    }
-  ],
-  "notices": [
-    "최신 신고·공개 실거래 기준이며 계약 취소·정정·신고 지연으로 변경될 수 있습니다."
-  ]
+  "transaction_type": "sale",
+  "property_types": ["apartment"],
+  "lawd_codes": ["41465", "41135"],
+  "budget": {
+    "max_price_10k_krw": 90000
+  },
+  "area": {
+    "min_m2": 74,
+    "max_m2": 86,
+    "tolerance_m2": 1
+  },
+  "building": {
+    "max_age_years": 20
+  },
+  "hard_constraints": {
+    "min_transaction_count": 3
+  },
+  "unknown_policy": "neutral",
+  "listing_sources": ["naver", "daangn", "peterpan", "asil", "kb"]
 }
 ```
 
-`null`은 계산 불가 또는 원천 미제공입니다. 0원·0건과 의미가 다릅니다.
+정규화 결과는 `profile_id`, `schema_version`, timestamps, 정규화한 weights를 추가합니다.
 
-## 5. Canonical 도구
-
-### `kr_apartment.resolve_location`
-
-한국어 지역명 또는 코드를 LAWD_CD 후보로 변환합니다.
-
-```json
-{"query":"서울특별시 강남구","limit":5}
-```
-
-### `kr_apartment.get_transactions`
-
-통합 실거래 조회입니다.
-
-주요 입력:
-
-- `lawd_code`: 5자리 코드 또는 해석 가능한 지역명
-- `property_type`: apartment, officetel, villa, house, commercial
-- `trade_type`: sale, rent
-- `date_from`, `date_to`: YYYYMM, YYYY-MM, YYYY-MM-DD
-- `complex_name`
-- `area_m2`, `area_tolerance_m2`, `area_min_m2`, `area_max_m2`
-- `include_canceled`, `include_raw`, `limit`
-
-출력 거래에는 `source_record_id`, 계약일, 가격/보증금/월세, 면적, 취소 상태가 포함됩니다.
-
-### `kr_apartment.search_complexes`
-
-지역·기간의 아파트 매매 자료에 나타난 단지명을 검색합니다.
-
-### `kr_apartment.get_complex_snapshot`
-
-매매와 전세를 병렬 조회해 단지 스냅샷을 계산합니다.
-
-- 90일 매매 중위값
-- 90일 전세 중위값
-- 조회 범위 최고가
-- 회복률
-- 전세가율
-- 추정 갭
-- 최근/직전 30일 거래량
-- 표본 품질
-
-### `kr_apartment.compare_complexes`
-
-2~10개 단지를 같은 기간·면적 오차로 비교합니다.
+### 6.2 Candidate Facts
 
 ```json
 {
-  "complexes": [
-    {"lawd_code":"11680","complex_name":"A단지","area_m2":84.9},
-    {"lawd_code":"11710","complex_name":"B단지","area_m2":84.8}
-  ],
-  "date_from":"2025-09",
-  "date_to":"2026-08"
+  "lawd_code": "41465",
+  "region_name": "경기도 용인시 수지구",
+  "complex_name": "예시단지",
+  "transaction_type": "sale",
+  "reference_price_10k_krw": 75500,
+  "latest_contract_date": "2026-08-03",
+  "transaction_count": 6,
+  "area_min_m2": 84.8,
+  "area_max_m2": 84.99,
+  "representative_build_year": 2015,
+  "recovery_rate_pct": 91.5,
+  "source_months": ["202607", "202608"],
+  "enrichment": {}
 }
 ```
 
-### `kr_apartment.get_region_pulse`
+### 6.3 Candidate Score
 
-최근 30일과 직전 30일의 거래량·중위가격을 비교합니다.
-
-### `kr_apartment.rank_complexes`
-
-지원 지표:
-
-```text
-transaction_volume
-median_price
-recovery_rate
-volume_momentum
-jeonse_ratio
-estimated_gap
+```json
+{
+  "match_score": 87.6,
+  "confidence_score": 78.0,
+  "excluded": false,
+  "exclusion_reasons": [],
+  "components": [],
+  "strengths": [],
+  "tradeoffs": [],
+  "unknowns": [],
+  "available_weight": 0.82,
+  "total_weight": 1.0
+}
 ```
 
-### `kr_apartment.get_signal_feed`
+### 6.4 Listing Link
 
-`NEW_HIGH`와 `TRANSACTION_RESUMED` 신호를 반환합니다. 투자 신호가 아니라 데이터 조건 충족 이벤트입니다.
-
-### `kr_apartment.get_data_freshness`
-
-최신성 정의와 신고 지연·정정 가능성을 반환합니다.
-
-### `kr_apartment.get_source_link`
-
-`molit`, `apt2me`, `github` 링크를 반환합니다. Apt2Me는 기본 `LINK_OUT_ONLY`입니다.
-
-### 금융 도구
-
-```text
-kr_apartment.calculate_loan_payment
-kr_apartment.calculate_compound_growth
-kr_apartment.calculate_monthly_cashflow
+```json
+{
+  "source_id": "daangn",
+  "source_name": "당근 부동산",
+  "access_mode": "LINK_OUT_ONLY",
+  "link_type": "REGION_MAP",
+  "url": "https://realty.daangn.com/map/...",
+  "metadata_available": false,
+  "policy_note": "원문에서 현재 광고 상태를 확인해야 합니다."
+}
 ```
 
-모든 결과는 가정 기반 산술 계산입니다.
+## 7. 추천 호출 순서
 
-### 관심 목록 도구
-
-```text
-kr_apartment.get_watchlist
-kr_apartment.upsert_watchlist_item
-kr_apartment.delete_watchlist_item
-kr_apartment.get_watchlist_brief
-```
-
-로컬 JSON 어댑터는 단일 사용자 stdio 용도입니다. HTTP 다중 사용자에서는 DB/OAuth 어댑터로 교체합니다.
-
-## 6. Vendored compatibility tools
-
-`ENABLE_REAL_ESTATE_MCP_COMPAT=true`이면 `src/real_estate/`의 등록 함수를 같은 FastMCP 인스턴스에서 실행합니다. 이에 따라 원본 프로젝트의 다음 범주가 별도 설치 없이 노출됩니다.
-
-- 지역 코드 검색
-- 아파트·오피스텔·연립다세대·단독주택·상업용 매매
-- 아파트·오피스텔·연립다세대·단독주택 전월세
-- 아파트 청약 공고·결과
-- 원리금·복리·현금흐름 계산
-
-동일 목적이면 canonical `kr_apartment.*` 도구를 우선합니다. canonical 계층은 페이지네이션, 취소 보존, null 의미, 공통 envelope와 고수준 지표를 추가합니다.
-
-## 7. 오류
-
-| 오류 | 의미 | 조치 |
-|---|---|---|
-| `MISSING_DATA_GO_KR_API_KEY` | 거래 API 키 없음 | 환경 변수 설정 |
-| `PUBLIC_DATA_RESPONSE_ERROR` | 원천 오류 또는 XML 해석 실패 | 응답 코드·범위 확인 |
-| `PUBLIC_DATA_ERROR` | timeout·네트워크·재시도 소진 | 잠시 후 재시도 또는 범위 축소 |
-| `ValueError: 지역명이 모호` | 후보가 여러 지역 | 5자리 코드 또는 완전한 지역명 사용 |
-| 기간 상한 오류 | 60개월 초과 | 요청을 나눔 |
-| 페이지 상한 오류 | 50페이지 초과 | 지역·월 범위를 축소 |
-
-서버는 서비스 키를 오류 메시지에 포함하지 않습니다.
-
-## 8. 데이터 정규화
+### 일회성 탐색
 
 ```text
-sale         → price_10k_krw
-jeonse       → deposit_10k_krw, monthly_rent_10k_krw = 0 또는 null
-monthly_rent → deposit_10k_krw + monthly_rent_10k_krw > 0
+resolve_location
+→ validate_search_profile
+→ recommend_complexes
+→ explain_complex_match (선택)
+→ get_complex_snapshot (선택)
 ```
 
-취소 판정은 원천의 해제 구분 또는 해제일을 이용합니다. 정확히 같은 source hash는 중복 제거하지만 취소 revision을 임의로 유효 거래와 합치지 않습니다.
+### 반복 탐색
 
-## 9. 성능·호출 예산
+```text
+validate_search_profile
+→ create_search_profile
+→ save_search
+→ get_search_updates
+```
 
-- 월과 페이지는 순차 처리해 공공 API에 과도한 동시 요청을 보내지 않습니다.
-- 단지 snapshot과 비교는 매매·전세만 병렬 처리합니다.
-- 공개 운영에서는 지역·계약월 응답 캐시를 권장합니다.
-- 캐시는 원천 이용 조건과 정정 반영 주기를 준수해야 합니다.
+### 사용자 제공 매물 URL
 
-## 10. 프로토콜 검증
+```text
+inspect_listing_url
+→ get_complex_snapshot 또는 get_transactions
+→ 사용자가 제공한 광고 정보와 수동 비교
+```
+
+v3 기본 도구는 URL 페이지 내용을 자동 추출하지 않습니다.
+
+## 8. Link Source Capability
+
+원천 capability는 최소 다음 필드를 포함합니다.
+
+```text
+source_id
+name
+homepage
+domains
+category
+access_mode
+supports_user_supplied_url
+supported_property_types
+allow_metadata_display
+allow_metadata_storage
+allow_image_storage
+allow_contact_storage
+```
+
+기본 registry에서는 모든 저장·재표시 flag가 false입니다.
+
+## 9. 저장 검색 diff
+
+변경 event 예:
+
+```text
+CANDIDATE_ADDED
+CANDIDATE_REMOVED
+RANK_CHANGED
+REFERENCE_PRICE_CHANGED
+TRANSACTION_COUNT_CHANGED
+NO_BASELINE
+NO_CHANGE
+```
+
+가격 변화는 동일 거래 유형과 동일 candidate key에서만 비교합니다.
+
+## 10. 오류 모델
+
+도구는 예외 stack trace 대신 구조화 오류를 반환해야 합니다.
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "area.min_m2 must not exceed area.max_m2",
+    "retryable": false,
+    "source": null
+  }
+}
+```
+
+주요 코드:
+
+| Code | 의미 | 재시도 |
+|---|---|---:|
+| `VALIDATION_ERROR` | 입력 오류 | 아니오 |
+| `NOT_FOUND` | 프로필·검색·단지 없음 | 아니오 |
+| `AMBIGUOUS_LOCATION` | 지역 후보 복수 | 사용자 선택 |
+| `CONFIG_ERROR` | API key 등 설정 없음 | 설정 후 |
+| `SOURCE_TIMEOUT` | 외부 원천 timeout | 예 |
+| `SOURCE_RATE_LIMITED` | 호출 한도 | 나중에 |
+| `PARTIAL_RESULT` | 일부 지역·원천 성공 | 선택 |
+| `UNSUPPORTED_SOURCE` | registry에 없는 원천 | 아니오 |
+| `POLICY_DENIED` | 허용되지 않은 데이터 작업 | 아니오 |
+
+## 11. Tool Annotation
+
+- 조회·검증·계산: read-only, non-destructive
+- create/update: write, idempotency 고려
+- delete profile/search/watchlist: destructive
+- 외부 링크 생성: network fetch 없음
+- 실제 공공 API 조회: open-world effect
+
+## 12. 페이지네이션과 제한
+
+공공 API adapter:
+
+```text
+page size 기본 1000
+max pages 기본 50
+max months 기본 60
+external concurrency 기본 4
+```
+
+Home Finder:
+
+```text
+max lawd codes 20
+candidate limit 기본 20, 최대 100
+listing sources registry 내 값만 허용
+```
+
+## 13. 정책 강제
+
+MCP layer는 다음을 허용하지 않습니다.
+
+- 제3자 플랫폼 로그인 cookie 입력
+- 광고 페이지를 fetch하는 generic URL tool
+- 승인 없는 listing metadata 저장
+- 사진·연락처 저장
+- AI가 계산한 비재현 점수를 canonical score로 저장
+
+## 14. 호환 계층
+
+`ENABLE_REAL_ESTATE_MCP_COMPAT=true`일 때 16개 호환 도구를 추가합니다. 호환 도구의 이름과 단순 월별 API 형태는 기존 클라이언트 이전을 위한 것이며, 신규 구현은 범위·최신성·정규화·정책이 강화된 canonical 도구를 사용해야 합니다.
+
+## 15. 검증
 
 ```bash
+python scripts/generate_tool_catalog.py
 python scripts/validate_package.py . --write-manifest
 pytest
-kr-apartment-market --transport stdio
 ```
 
-실제 원천 API smoke test와 Streamable HTTP inspector 절차는 `VALIDATION.md`를 따릅니다.
+validator는 catalog와 runtime 이름, 32/48 도구 수, v3 필수 파일, source policy, Python compile과 라이선스 고지를 확인합니다.

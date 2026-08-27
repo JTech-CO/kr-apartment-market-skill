@@ -1,8 +1,26 @@
 include LICENSE
+include README.md
+include PRD.md
+include SKILL.md
+include MCP_TOOL_SPEC.md
 include THIRD_PARTY_NOTICES.md
+include RELEASE_NOTES-v3.0.0.md
+include VALIDATION.md
+include VALIDATION_REPORT.md
+include index.html
+include .env.example
+include .mcp.json
+recursive-include agents *
+recursive-include database *
+recursive-include docker *
+recursive-include docs *.md
+recursive-include evals *.yaml *.yml
+recursive-include images *.png *.jpg *.jpeg *.webp
 recursive-include licenses *
+recursive-include mcp *.json
+recursive-include references *.md
+recursive-include scripts *.py
 recursive-include src/kr_apartment_market/resources *
 recursive-include src/real_estate/resources *
 include src/real_estate/LICENSE
-recursive-include docs *.md
-recursive-include references *.md
+recursive-include tests *.py

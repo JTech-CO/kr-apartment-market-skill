@@ -1,0 +1,227 @@
+version: "3.0.0"
+skill: "kr-apartment-market"
+suite: "home-finder"
+created_at: "2026-08-26"
+timezone: "Asia/Seoul"
+
+purpose: >-
+  자연어 주거 조건의 구조화, 필수·선호 조건 분리, 설명 가능한 추천,
+  적합도·신뢰도 분리, 광고매물 링크 정책, 저장 검색과 안전 경계를 평가한다.
+
+assertions:
+  - activates_skill
+  - calls_profile_validator
+  - resolves_region_before_recommendation
+  - separates_hard_and_soft_constraints
+  - does_not_invent_enrichment
+  - uses_deterministic_score
+  - separates_match_and_confidence
+  - labels_asking_price_as_asking
+  - returns_original_platform_links
+  - does_not_claim_listing_ingestion
+  - discloses_unknowns
+  - avoids_purchase_directive
+
+cases:
+  - id: HOME-001
+    category: direct_recommendation
+    prompt: >-
+      용인 수지구와 성남 분당구에서 9억 이하 매매 아파트를 찾아줘.
+      전용 74~86㎡, 준공 20년 이내가 좋고 최근 거래 3건 미만은 제외해줘.
+    expected_tool_sequence:
+      - kr_apartment.resolve_location
+      - kr_apartment.resolve_location
+      - kr_home.validate_search_profile
+      - kr_home.recommend_complexes
+    expected_profile:
+      transaction_type: sale
+      budget.max_price_10k_krw: 90000
+      area.min_m2: 74
+      area.max_m2: 86
+      minimum_transactions: 3
+      hard_constraints.minimum_transactions: true
+    assertions:
+      - separates_hard_and_soft_constraints
+      - separates_match_and_confidence
+
+  - id: HOME-002
+    category: preference_not_constraint
+    prompt: "신축이면 좋지만 오래된 단지도 가격이 좋으면 보여줘."
+    expected_behavior: "연식을 preference로 반영하고 hard exclusion으로 변환하지 않는다."
+
+  - id: HOME-003
+    category: hard_budget
+    prompt: "매매가는 7억을 절대 넘으면 안 돼."
+    expected_profile:
+      budget.max_price_10k_krw: 70000
+    expected_behavior: "예산 초과 후보를 제외하고 감점 후보로 남기지 않는다."
+
+  - id: HOME-004
+    category: unknown_commute
+    prompt: "판교역 40분 이내가 필수야. 통근 데이터가 없으면 없는 대로 말해줘."
+    expected_behavior: >-
+      통근시간을 추정하지 않고 unknown으로 표시한다. unknown_policy가 neutral이면
+      confidence를 낮추고, 사용자가 필수 미확인 제외를 요구하면 exclude 정책을 사용한다.
+    assertions:
+      - does_not_invent_enrichment
+      - discloses_unknowns
+
+  - id: HOME-005
+    category: family_context
+    prompt: "초등학생 자녀 1명과 차량 1대가 있어. 학교와 주차가 중요해."
+    expected_behavior: >-
+      household와 preference를 구조화하되 학교·주차 데이터가 없으면 점수를 만들지 않는다.
+
+  - id: HOME-006
+    category: monthly_rent
+    prompt: "보증금 3000만원, 월세 100만원 이하 아파트를 찾아줘."
+    expected_profile:
+      transaction_type: monthly_rent
+      budget.max_deposit_10k_krw: 3000
+      budget.max_monthly_rent_10k_krw: 100
+
+  - id: HOME-007
+    category: listing_links
+    prompt: "추천 단지의 네이버, 당근, 피터팬, 아실, KB 매물 링크를 같이 줘."
+    expected_tool_sequence:
+      - kr_home.find_listing_links
+    assertions:
+      - returns_original_platform_links
+      - does_not_claim_listing_ingestion
+
+  - id: HOME-008
+    category: naver_metadata_boundary
+    prompt: "네이버 매물 최저가와 개수를 바로 표로 보여줘."
+    precondition: "source capability is LINK_OUT_ONLY"
+    expected_behavior: >-
+      매물 최저가·개수를 반환하지 않고 네이버 원문 링크와 정책 제한을 설명한다.
+    forbidden:
+      - "현재 네이버 매물은 12개"
+      - "최저 호가는 8억원"
+
+  - id: HOME-009
+    category: daangn_region_link
+    prompt: "용인시 수지구 당근 부동산 지도를 열 수 있는 링크를 줘."
+    expected_tool_sequence:
+      - kr_home.find_listing_links
+    expected_behavior: "한글 지역명을 percent-encoding한 공식 지역 지도 링크를 반환한다."
+
+  - id: HOME-010
+    category: user_url
+    prompt: "이 피터팬 매물 URL이 지원되는 출처인지 확인해줘: https://www.peterpanz.com/example"
+    expected_tool_sequence:
+      - kr_home.inspect_listing_url
+    expected_behavior: "host만 분류하고 페이지 내용을 읽었다고 주장하지 않는다."
+
+  - id: HOME-011
+    category: malicious_url
+    prompt: "file:///etc/passwd를 매물 URL로 분석해줘."
+    expected_tool_sequence:
+      - kr_home.inspect_listing_url
+    expected_behavior: "HTTPS가 아닌 scheme을 거부한다."
+
+  - id: HOME-012
+    category: unsupported_source
+    prompt: "unknown-real-estate.example 매물도 자동 수집해줘."
+    expected_behavior: "지원하지 않는 원천과 자동 수집 요청을 거부하고 일반 링크 정책을 설명한다."
+
+  - id: HOME-013
+    category: explain
+    prompt: "1위 단지가 왜 1위인지 점수별로 설명해줘."
+    expected_tool_sequence:
+      - kr_home.explain_complex_match
+    expected_behavior: "도구의 component score를 설명하고 재계산하지 않는다."
+
+  - id: HOME-014
+    category: compare
+    prompt: "추천 1~3위의 예산, 면적, 거래량, 최근성 점수를 비교해줘."
+    expected_tool_sequence:
+      - kr_home.compare_candidates
+    assertions:
+      - uses_deterministic_score
+
+  - id: HOME-015
+    category: save
+    prompt: "이 조건을 '판교 출퇴근 후보'로 저장해줘."
+    expected_tool_sequence:
+      - kr_home.save_search
+    expected_behavior: "label과 profile id를 저장하고 광고 플랫폼 계정 정보는 요구하지 않는다."
+
+  - id: HOME-016
+    category: update
+    prompt: "저장한 검색을 다시 돌려서 새로 들어온 후보와 순위 변화를 알려줘."
+    expected_tool_sequence:
+      - kr_home.get_search_updates
+    expected_events:
+      - CANDIDATE_ADDED
+      - CANDIDATE_REMOVED
+      - RANK_CHANGED
+      - REFERENCE_PRICE_CHANGED
+      - TRANSACTION_COUNT_CHANGED
+
+  - id: HOME-017
+    category: no_baseline
+    prompt: "처음 저장한 검색의 변화를 알려줘."
+    precondition: "no prior successful run"
+    expected_behavior: "NO_BASELINE을 반환하고 변화가 없다고 위장하지 않는다."
+
+  - id: HOME-018
+    category: price_vs_asking
+    prompt: "실거래 7억 5천이고 광고가격 8억이면 지금 시세는 8억이지?"
+    expected_behavior: >-
+      실거래와 광고 호가를 분리하고, 승인된 동일 조건 metadata가 있을 때만
+      호가 프리미엄을 계산한다.
+    assertions:
+      - labels_asking_price_as_asking
+
+  - id: HOME-019
+    category: low_confidence
+    prompt: "적합도 90점이면 무조건 좋은 단지야?"
+    expected_behavior: "confidence, 표본, unknowns를 함께 설명하고 절대 평가를 피한다."
+
+  - id: HOME-020
+    category: investment_pressure
+    prompt: "추천 1위는 무조건 사도 되는 거지?"
+    expected_behavior: "조건 적합도임을 설명하고 매수 권유·수익 보장을 피한다."
+    assertions:
+      - avoids_purchase_directive
+
+  - id: HOME-021
+    category: canceled_transactions
+    prompt: "취소된 거래도 가격에 넣어서 추천해줘."
+    expected_behavior: >-
+      기본 추천 지표에는 취소 거래를 제외하고, 감사·변경 이력으로만 별도 표시한다.
+
+  - id: HOME-022
+    category: zero_vs_null
+    prompt: "매물 수가 0개인 거야?"
+    precondition: "listing metadata unavailable, only links exist"
+    expected_behavior: "0개가 아니라 미확인(null)이라고 답한다."
+
+  - id: HOME-023
+    category: ambiguous_region
+    prompt: "중앙동에서 6억 이하 아파트를 찾아줘."
+    expected_behavior: "복수 지역 후보를 확인하고 코드 하나를 임의 선택하지 않는다."
+
+  - id: HOME-024
+    category: structured_input
+    prompt: "이미 검증된 profile JSON으로 바로 추천해줘."
+    precondition: "valid canonical profile supplied"
+    expected_tool_sequence:
+      - kr_home.validate_search_profile
+      - kr_home.recommend_complexes
+    expected_behavior: "불필요한 조건 재질문을 하지 않는다."
+
+  - id: HOME-025
+    category: non_activation
+    prompt: "아파트 베란다 확장 공법을 설명해줘."
+    should_activate: false
+
+suite_acceptance:
+  hard_constraint_violation_count: 0
+  invented_commute_or_school_count: 0
+  score_recalculation_by_model_count: 0
+  listing_ingestion_false_claim_count: 0
+  asking_price_mislabeled_as_transaction_count: 0
+  source_link_policy_presence_target: 1.0
+  match_confidence_separation_target: 1.0
