@@ -1,127 +1,151 @@
-# KR Apartment Market AI Skill
+# KR Apartment Market AI Skill v3.0.0
 
-대한민국 부동산의 **최신 신고 실거래를 직접 조회하고**, 단지·지역 시장을 동일 기준으로 계산해 AI가 근거와 함께 설명하도록 만드는 오픈소스 **SKILL + 통합 MCP 서버**입니다.
+대한민국의 공공 실거래 데이터를 근거로 사용자의 주거 선호를 구조화하고, **적합도가 높은 아파트 단지를 설명 가능한 점수로 추천한 뒤 현재 광고매물을 원문 플랫폼에서 확인하도록 연결하는 플랫폼 중립형 AI Home Finder**입니다.
 
 ![KR Apartment Market AI Skill](images/logo.png)
 
-[소개 페이지](https://jtech-co.github.io/kr-apartment-market-skill/) · [PRD](PRD.md) · [MCP 명세](MCP_TOOL_SPEC.md) · [SKILL](SKILL.md) · [통합 설계](docs/REAL_ESTATE_MCP_INTEGRATION.md)
+> 이 프로젝트의 “최신”은 주식 체결가 같은 실시간 시세가 아니라, 국토교통부 등 원천 시스템에 최신으로 신고·공개된 데이터를 의미합니다. 광고가격은 실거래가가 아닌 호가이며, 두 값을 명확히 분리합니다.
 
-> 이 프로젝트에서 “실시간” 또는 “최신”은 주식 체결처럼 즉시 생성되는 가격이 아니라, 국토교통부 등 원천 시스템에 **최신으로 신고·공개된 거래**를 의미합니다. 신고 지연, 취소, 정정 때문에 결과가 바뀔 수 있습니다.
+- 소개 페이지: https://jtech-co.github.io/kr-apartment-market-skill/
+- 저장소: https://github.com/JTech-CO/kr-apartment-market-skill
+- 라이선스: MIT
 
-## v2.0: 설계 패키지에서 실행 가능한 서버로
+## v3.0.0에서 달라진 점
 
-v1은 PRD, SKILL, MCP 도구 계약, PostgreSQL 스키마를 중심으로 한 설계 패키지였습니다. v2는 MIT 라이선스의 [`tae0y/real-estate-mcp`](https://github.com/tae0y/real-estate-mcp)에서 검증된 공공데이터 실행 범위를 저장소 내부에 통합해, 별도 저장소나 별도 MCP 서버를 설치하지 않고 바로 실행할 수 있도록 확장했습니다.
+v2.0.0의 국토교통부·청약홈 MCP 런타임과 아파트 시장 분석 기능은 그대로 유지하면서 다음 계층을 추가했습니다.
 
-- 국토교통부 실거래가 공개 API를 직접 호출하는 런타임 내장
-- 아파트·오피스텔·연립다세대·단독/다가구·상업용 건물 지원
-- 매매·전세·월세 거래 정규화
-- 취소 거래를 삭제하지 않고 상태와 해제일 보존
-- API 전체 페이지 순회, 재시도, 기간 상한, 표준 오류 처리
-- 단지 스냅샷·비교·지역 펄스·순위·신고가 신호 계산
-- 대출 상환액·복리·월 현금흐름 계산기 내장
-- 청약홈/ODCloud 및 원본 도구 이름의 호환 계층 포함
-- 로컬 관심 목록 저장소와 PostgreSQL 운영 설계 병행
-- stdio·Streamable HTTP·Docker 실행 지원
+1. 자연어 주거 조건을 버전이 있는 `SearchProfile`로 정규화합니다.
+2. 필수 조건, 선호 조건, 제외 조건과 가중치를 분리합니다.
+3. 공공 실거래로 확인 가능한 가격·면적·연식·거래량·최근성·회복률을 결정론적으로 점수화합니다.
+4. `match_score`와 `confidence_score`를 별도로 반환합니다.
+5. 추천 이유, 양보해야 할 조건, 확인되지 않은 조건을 분리합니다.
+6. 네이버 부동산, 당근 부동산, 피터팬, 아실, KB부동산 등의 원문 탐색 링크를 생성합니다.
+7. 검색 프로필과 추천 실행 결과를 저장하고 후보·순위·가격·거래량 변화를 비교합니다.
+8. 기존 17개 `kr_apartment.*` 도구에 15개 `kr_home.*` 도구를 추가했습니다.
 
-`real-estate-mcp`의 소스는 `src/real_estate/`에 라이선스 고지와 함께 vendoring되어 있습니다. 사용자는 이 저장소 하나만 설치하면 됩니다. 원본 저작권과 MIT 전문은 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)와 [`licenses/real-estate-mcp-MIT.txt`](licenses/real-estate-mcp-MIT.txt)에 보존했습니다.
+## 해결하려는 문제
 
-## 무엇을 할 수 있나
-
-| 질문·작업 | 처리 방식 |
-|---|---|
-| “강남구 아파트 84㎡ 최근 실거래” | 법정동 코드 해석 → 국토교통부 API → 취소 거래 반영 → 표준 거래 모델 |
-| “A단지와 B단지 중 어느 쪽이 회복됐나” | 같은 기간·전용면적·산식으로 중위가, 최고가 회복률, 거래량 비교 |
-| “수지구 거래가 살아나는 단지” | 최근 30일과 직전 30일 거래량을 비교해 거래 재개·모멘텀 계산 |
-| “전세가율과 추정 갭” | 동일 면적·동일 기간 매매/전세 중위값으로 결정론적 계산 |
-| “최근 신고가 단지” | 최신 유효 거래와 그 이전 최고가를 계약일 순으로 비교 |
-| “오피스텔·빌라·단독주택 거래” | 동일 MCP 서버의 통합 거래 도구에서 유형만 변경 |
-| “청약 공고와 경쟁률” | vendored ApplyHome/ODCloud 호환 도구 사용 |
-| “대출 원리금·임대 현금흐름” | 입력 가정만으로 계산하며 승인·수익을 보장하지 않음 |
-| “관심 단지 브리핑” | 로컬 JSON 또는 PostgreSQL/OAuth 어댑터로 관심 목록 유지 |
-
-## 아키텍처
+실거래 분석 서비스는 많지만 실제 주택 탐색 과정에서는 다음 작업이 다시 분리됩니다.
 
 ```text
-ChatGPT / Codex / Claude Code / MCP Client
-                    │
-                    ▼
-      KR Apartment Market SKILL
-      - 질문 해석·도구 선택·출력 규칙
-                    │
-                    ▼
-      통합 FastMCP 서버 (이 저장소)
-      ├─ 고수준 분석 도구: kr_apartment.*
-      ├─ 공공데이터 직접 조회·정규화
-      ├─ 결정론적 지표 엔진
-      ├─ 로컬 관심 목록
-      └─ real-estate-mcp 호환 도구
-                    │
-          ┌─────────┴─────────┐
-          ▼                   ▼
- 국토교통부/공공데이터포털   청약홈/ODCloud
-          │
-          ├─ 기본: 온디맨드, DB 불필요
-          └─ 선택: PostgreSQL + Redis + OAuth
+내 조건 정리
+→ 지역·단지 후보 찾기
+→ 동일 면적 실거래 확인
+→ 거래량과 가격 흐름 판단
+→ 각 플랫폼에서 현재 매물 재검색
+→ 후보를 다시 비교
 ```
 
-아파트Me는 서비스 기능과 사용자 경험을 참고하고, 사용자가 원문을 확인할 수 있는 링크를 제공하는 원천입니다. 자동 수집·저장·재배포는 별도 서면 권한이 확보되기 전까지 비활성화합니다. v2의 독립 실행 데이터 계층은 국토교통부와 공공데이터포털 API입니다.
+v3.0.0은 이 흐름을 한 번의 AI 워크플로로 묶습니다. 단, 제3자 플랫폼의 광고매물을 복제하는 통합 매물 데이터베이스가 아니라 **추천과 공공데이터 분석은 자체 수행하고, 광고매물은 원문 확인 경로를 연결하는 구조**입니다.
 
+## 사용 예시
 
-### 오프라인 지역 코드 범위
-
-배포물에는 전국 주요 시·군·구를 포함한 압축 5자리 LAWD_CD 표가 들어 있습니다. 패키지 표에 없는 지역도 사용자가 정확한 5자리 코드를 입력하면 조회할 수 있습니다. 전체 공식 법정동 표가 필요한 운영 환경은 `scripts/update_region_codes.py`로 공공 원천 또는 검증된 원본 TSV를 변환해 교체합니다.
-
-## 빠른 시작
-
-### 1. API 키 준비
-
-공공데이터포털에서 필요한 국토교통부 실거래 API 활용 신청을 한 뒤 환경 변수를 설정합니다. 청약 도구를 쓰지 않는다면 `ODCLOUD_API_KEY`는 생략할 수 있습니다.
-
-```bash
-cp .env.example .env
-# .env에서 DATA_GO_KR_API_KEY 입력
+```text
+용인 수지구와 성남 분당구에서 매매 9억 원 이하 아파트를 찾아줘.
+전용 74~86㎡, 준공 20년 이내를 선호하고 최근 거래가 너무 적은 단지는 피하고 싶어.
+판교 출퇴근과 초등학생 자녀가 있지만 통근·학군 데이터가 없으면 추정하지 말고 미확인으로 표시해줘.
+추천 이유와 부족한 조건, 최근 실거래, 네이버·당근·피터팬·아실·KB 원문 링크를 같이 보여줘.
 ```
 
-디코딩 키와 `%`가 포함된 인코딩 키를 모두 허용합니다. 키는 도구 응답과 일반 로그에 출력하지 않습니다.
+권장 응답 구조:
 
-### 2. 설치
-
-```bash
-# uv 권장
-uv sync
-
-# 또는 pip
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\\Scripts\\activate
-python -m pip install -e .
+```text
+1. 해석된 조건 확인
+2. 필수 조건 위반 후보 제외
+3. 적합도·신뢰도 기준 상위 단지
+4. 단지별 공식 실거래 근거
+5. 추천 이유·트레이드오프·미확인 항목
+6. 광고매물 원문 확인 링크
+7. 최신성·표본·취소 거래 주의사항
 ```
 
-### 3. stdio MCP 서버
+## 핵심 설계 원칙
 
-```bash
-uv run kr-apartment-market --transport stdio
+### 1. 공공데이터가 추천의 기준
+
+단지 추천과 시장 지표는 국토교통부 실거래 등 이용 권한이 명확한 원천을 기준으로 계산합니다. AI가 현재 가격을 내부 기억으로 추측하지 않습니다.
+
+### 2. 필수 조건과 선호 조건 분리
+
+- **필수 조건**: 위반 시 후보 제외
+- **선호 조건**: 충족 정도를 점수에 반영
+- **제외 조건**: 명시적 위험·비선호 대상 제거
+- **미확인 조건**: 임의 추정하지 않고 데이터 신뢰도에 반영
+
+### 3. 점수와 신뢰도 분리
+
+```json
+{
+  "match_score": 87.6,
+  "confidence_score": 78.0,
+  "strengths": ["예산 범위 충족", "희망 면적 거래 존재"],
+  "tradeoffs": ["희망 연식보다 오래됨"],
+  "unknowns": ["통근시간 데이터 미연결", "세대당 주차 미확인"]
+}
 ```
 
-저장소 루트의 `.mcp.json`은 이 명령을 사용하는 예시입니다.
+### 4. 실거래와 광고가격 분리
 
-### 4. Streamable HTTP
+- 실거래: 계약·신고된 공식 거래
+- 광고가격: 매도자·임대인이 제시한 호가
+- 광고매물 링크: 원문 플랫폼에서 현재 상태를 확인하기 위한 경로
 
-```bash
-uv run kr-apartment-market \
-  --transport streamable-http \
-  --host 0.0.0.0 \
-  --port 8765
+### 5. 링크 우선 정책
+
+기본 접근 모드는 `LINK_OUT_ONLY`입니다.
+
+```text
+허용: 플랫폼 홈·지역 지도·검증된 원문 URL 연결
+금지: 비공식 API를 통한 대량 수집, 전체 매물 복제, 사진·설명·연락처 저장
+확장: 공식 계약·서면 허가·정식 API가 있을 때만 메타데이터 표시 활성화
 ```
 
-공개 배포에서는 TLS 종단, 인증, 호출량 제한, 원천 API 키 보호를 반드시 추가합니다.
+## 지원하는 데이터와 링크 원천
 
-### 5. Docker
+### 공공데이터 런타임
 
-```bash
-docker compose up --build
-```
+- 아파트 매매·전세·월세
+- 오피스텔 매매·전세·월세
+- 연립·다세대 매매·전세·월세
+- 단독·다가구 매매·전세·월세
+- 상업·업무용 매매
+- 청약 공고·청약 통계
 
-## 고수준 도구
+### 기본 광고매물·분석 링크
+
+| 원천 | 기본 역할 | 기본 접근 모드 |
+|---|---|---|
+| 네이버 부동산 | 주거·상업·토지 광고매물 원문 확인 | `LINK_OUT_ONLY` |
+| 당근 부동산 | 지역 지도와 직거래·중개매물 확인 | `LINK_OUT_ONLY` |
+| 피터팬 | 주거 광고매물 원문 확인 | `LINK_OUT_ONLY` |
+| 아실 | 아파트 단지·지역 분석 교차 확인 | `LINK_OUT_ONLY` |
+| KB부동산 | 시세·실거래·광고매물 교차 확인 | `LINK_OUT_ONLY` |
+
+추가 등록 원천: 다방, 직방, 디스코, 밸류맵, 땅야, 온비드.
+
+## 설명 가능한 추천 점수
+
+기본 가중치:
+
+| 구성 요소 | 가중치 | 기본 데이터 원천 |
+|---|---:|---|
+| 예산 적합도 | 25% | 공공 실거래 |
+| 면적 적합도 | 15% | 공공 실거래 |
+| 거래 유동성 | 12% | 공공 실거래 |
+| 최근성 | 10% | 공공 실거래 |
+| 건축 연식 | 8% | 공공 실거래 보조 필드 |
+| 최고가 회복률 | 7% | 파생 지표 |
+| 전세 안전성 | 5% | 파생 지표 |
+| 통근 | 8% | 선택형 enrichment |
+| 교육 | 4% | 선택형 enrichment |
+| 주차 | 3% | 선택형 enrichment |
+| 매물 가용성 | 3% | 승인 데이터 또는 사용자 입력 |
+
+가중치는 프로필별로 변경할 수 있으며 입력값은 합계 1로 정규화됩니다. 통근·교육·주차·현재 매물 수처럼 원천이 연결되지 않은 항목은 점수를 지어내지 않습니다.
+
+## MCP 도구
+
+### 기존 시장 분석 도구 17개
 
 ```text
 kr_apartment.resolve_location
@@ -143,71 +167,154 @@ kr_apartment.delete_watchlist_item
 kr_apartment.get_watchlist_brief
 ```
 
-`ENABLE_REAL_ESTATE_MCP_COMPAT=true`가 기본값이므로 원본 `real-estate-mcp`의 지역 조회, 유형별 거래, 청약, 금융 계산 도구도 같은 서버에 등록됩니다. 호환 도구를 숨기고 고수준 도구만 노출하려면 다음과 같이 실행합니다.
+### Home Finder 도구 15개
 
-```bash
-kr-apartment-market --transport stdio --no-upstream-compat
+```text
+kr_home.validate_search_profile
+kr_home.create_search_profile
+kr_home.get_search_profile
+kr_home.update_search_profile
+kr_home.delete_search_profile
+kr_home.recommend_complexes
+kr_home.explain_complex_match
+kr_home.compare_candidates
+kr_home.find_listing_links
+kr_home.get_listing_source_capabilities
+kr_home.inspect_listing_url
+kr_home.save_search
+kr_home.get_saved_searches
+kr_home.delete_saved_search
+kr_home.get_search_updates
 ```
 
-도구의 입력·출력 계약은 [`mcp/tool-definitions.json`](mcp/tool-definitions.json)과 [`MCP_TOOL_SPEC.md`](MCP_TOOL_SPEC.md)를 참조합니다.
+기본 canonical 도구는 총 32개입니다. `ENABLE_REAL_ESTATE_MCP_COMPAT=true`이면 저장소 안에 포함된 `real-estate-mcp` 호환 도구 16개도 같은 서버에 등록됩니다.
 
-## 데이터 처리 원칙
+## 빠른 시작
 
-1. 최신 가격을 모델 기억으로 추측하지 않습니다.
-2. 거래일, 수집일, 원천, 조회 월을 분리합니다.
-3. 취소 거래는 원본에서 지우지 않고 `is_canceled`와 `canceled_at`으로 보존합니다.
-4. 기본 통계에서는 취소 거래를 제외합니다.
-5. 동일 전용면적을 우선하고 기본 허용 오차는 ±1㎡입니다.
-6. 데이터가 없을 때 0원이나 0%로 대체하지 않고 `null`을 반환합니다.
-7. 사실, 파생 지표, AI 해석을 구분합니다.
-8. 전세가율이나 갭만으로 위험·수익을 단정하지 않습니다.
-9. 투자, 감정평가, 세금, 대출 승인을 확정하거나 보장하지 않습니다.
-10. 아파트Me 데이터는 승인 전까지 링크아웃만 허용합니다.
+### 요구사항
 
-## 테스트와 검증
+- Python 3.11 이상
+- `uv` 권장
+- 공공데이터포털 국토교통부 실거래 API 키
+- 청약 도구 사용 시 ODCloud 키
+
+### 설치
 
 ```bash
-python -m pip install -e '.[dev]'
-pytest
-ruff check src/kr_apartment_market tests/runtime
-python scripts/validate_package.py . --write-manifest
+git clone https://github.com/JTech-CO/kr-apartment-market-skill.git
+cd kr-apartment-market-skill
+cp .env.example .env
+# .env에 API 키 입력
+uv sync --extra dev
 ```
 
-런타임 테스트는 XML 파싱, 취소 거래 보존, 전세·월세 분류, 지표 계산, 금융 계산, 법정동 코드, 관심 목록 원자적 저장과 통합 도구 등록을 검증합니다. 원본 호환 동작도 `tests/runtime/`에서 함께 확인합니다.
+### 도구 목록 확인
+
+```bash
+uv run kr-apartment-market --list-tools
+```
+
+### stdio MCP 실행
+
+```bash
+uv run kr-apartment-market --transport stdio
+```
+
+### Streamable HTTP 실행
+
+```bash
+uv run kr-apartment-market \
+  --transport streamable-http \
+  --host 127.0.0.1 \
+  --port 8765
+```
+
+### 테스트와 정적 검증
+
+```bash
+uv run pytest
+uv run python scripts/validate_package.py . --write-manifest
+```
+
+라이브 API 키가 없어도 fixture 기반 런타임 테스트와 패키지 검증을 실행할 수 있습니다.
+
+## 저장 구조
+
+개인용 기본 모드는 로컬 JSON을 사용합니다.
+
+```text
+.data/watchlist.json
+.data/home_finder.json
+```
+
+공개 서비스·다중 사용자 환경에서는 `database/schema.sql`과 다음 migration을 적용합니다.
+
+```text
+database/migrations/002_real_estate_mcp_integration.sql
+database/migrations/003_home_finder.sql
+```
+
+v3 DB 계층:
+
+```text
+finder/
+├─ 검색 프로필과 버전
+├─ 저장 검색과 실행 이력
+├─ 추천 후보
+└─ 점수 구성 요소
+
+listing/
+├─ 원천 레지스트리
+├─ 접근 정책
+├─ 원문 탐색 링크
+├─ 사용자 제공 URL
+├─ 허가된 매물 observation
+└─ 중복 클러스터·변경 이벤트
+```
 
 ## 저장소 구조
 
 ```text
-.
-├── SKILL.md
+kr-apartment-market-skill/
+├── README.md
 ├── PRD.md
+├── SKILL.md
 ├── MCP_TOOL_SPEC.md
-├── pyproject.toml
-├── .mcp.json
-├── src/
-│   ├── kr_apartment_market/      # v2 고수준 통합 런타임
-│   └── real_estate/              # vendored upstream compatibility layer
+├── RELEASE_NOTES-v3.0.0.md
+├── index.html
+├── agents/
 ├── database/
-│   ├── schema.sql
-│   └── migrations/
+│   └── migrations/003_home_finder.sql
+├── docs/
+│   ├── HOME_FINDER_ARCHITECTURE.md
+│   ├── SCORING_MODEL.md
+│   ├── LISTING_SOURCE_POLICY.md
+│   └── MIGRATION_v2_TO_v3.md
+├── evals/
 ├── mcp/tool-definitions.json
 ├── references/
-├── evals/
-├── tests/runtime/
-├── docker/
-├── licenses/
-└── docs/
+├── scripts/
+├── src/
+│   ├── kr_apartment_market/
+│   │   └── home/
+│   └── real_estate/
+└── tests/runtime/
 ```
 
-## 라이선스와 출처
+## 책임 범위
 
-프로젝트 전체는 MIT 라이선스입니다. `src/real_estate/`에 포함된 `real-estate-mcp` 파생 부분은 원 저작권자 `tae0y`의 MIT 조건을 따르며, 해당 고지를 삭제해서는 안 됩니다. 공개 데이터 자체의 이용 조건은 코드 라이선스와 별개이므로 각 원천의 이용약관, 호출 제한, 재배포 범위를 확인해야 합니다.
+이 프로젝트는 다음을 보장하지 않습니다.
 
-- 프로젝트 라이선스: [`LICENSE`](LICENSE)
-- 제3자 고지: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)
-- 원본 MIT 전문: [`licenses/real-estate-mcp-MIT.txt`](licenses/real-estate-mcp-MIT.txt)
-- 통합 방식: [`docs/REAL_ESTATE_MCP_INTEGRATION.md`](docs/REAL_ESTATE_MCP_INTEGRATION.md)
+- 미래 가격 또는 투자 수익
+- 대출 승인, 세금, 감정평가 결과
+- 제3자 플랫폼 광고매물의 실제 계약 가능 상태
+- 광고 내용의 진실성이나 중복 여부
+- 미연결 통근·학군·주차 데이터의 추정값
 
-## 상태
+주택 탐색을 돕는 근거 기반 의사결정 보조 도구이며, 최종 확인과 계약 판단은 사용자·중개사·전문가가 수행해야 합니다.
 
-v2는 실행 가능한 Beta입니다. 공공 API의 실제 응답 필드와 운영 트래픽은 서비스별 승인 범위에 따라 달라질 수 있으므로, 공개 배포 전 [`VALIDATION.md`](VALIDATION.md)의 실 API·PostgreSQL·MCP 프로토콜 검증을 수행해야 합니다.
+## 라이선스와 제3자 고지
+
+프로젝트 자체는 MIT 라이선스입니다. 통합된 `tae0y/real-estate-mcp`의 MIT 저작권 고지는 `THIRD_PARTY_NOTICES.md`, `licenses/`, `src/real_estate/LICENSE`에 보존되어 있습니다.
+
+MIT는 이 저장소의 코드를 사용할 권한을 제공하지만, 네이버·당근·피터팬·아실·KB부동산 등의 매물 데이터, 사진, 설명, 상표 또는 연락처를 재사용할 권한까지 제공하지 않습니다.

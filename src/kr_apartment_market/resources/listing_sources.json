@@ -1,0 +1,139 @@
+{
+  "registryVersion": "3.0.0",
+  "reviewedAt": "2026-08-26",
+  "defaultAccessMode": "LINK_OUT_ONLY",
+  "sources": [
+    {
+      "id": "naver",
+      "name": "네이버 부동산",
+      "homepage": "https://fin.land.naver.com/",
+      "domains": ["fin.land.naver.com"],
+      "category": "residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house", "commercial", "land"],
+      "notes": "공개 매물 페이지로 연결하되 자동 수집·재배포는 기본 비활성입니다."
+    },
+    {
+      "id": "daangn",
+      "name": "당근 부동산",
+      "homepage": "https://realty.daangn.com/",
+      "domains": ["realty.daangn.com"],
+      "category": "residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "PATH_REGION_MAP",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house", "commercial", "land"],
+      "notes": "공개 지역 지도 경로와 사용자가 선택한 개별 매물 URL을 연결합니다."
+    },
+    {
+      "id": "peterpan",
+      "name": "피터팬의 좋은방 구하기",
+      "homepage": "https://www.peterpanz.com/",
+      "domains": ["www.peterpanz.com", "peterpanz.com"],
+      "category": "residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house"],
+      "notes": "플랫폼 홈·검색 결과 또는 사용자가 제공한 개별 매물 URL로 연결합니다."
+    },
+    {
+      "id": "asil",
+      "name": "아실",
+      "homepage": "https://asil.kr/asil/index.jsp",
+      "domains": ["asil.kr", "www.asil.kr"],
+      "category": "apartment_analytics",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment"],
+      "notes": "단지·지역 분석 원문 확인 링크로 사용합니다."
+    },
+    {
+      "id": "kb",
+      "name": "KB부동산",
+      "homepage": "https://kbland.kr/",
+      "domains": ["kbland.kr", "www.kbland.kr"],
+      "category": "residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house"],
+      "notes": "KB 시세·실거래·광고매물은 공공 실거래와 분리해 원문에서 확인합니다."
+    },
+    {
+      "id": "dabang",
+      "name": "다방",
+      "homepage": "https://www.dabangapp.com/",
+      "domains": ["www.dabangapp.com", "dabangapp.com"],
+      "category": "small_residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["officetel", "villa", "house", "apartment"],
+      "notes": "원룸·투룸·오피스텔·빌라 확장 원천입니다."
+    },
+    {
+      "id": "zigbang",
+      "name": "직방",
+      "homepage": "https://www.zigbang.com/",
+      "domains": ["www.zigbang.com", "zigbang.com"],
+      "category": "residential",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house"],
+      "notes": "앱·웹의 원문 검색 경로로 연결합니다."
+    },
+    {
+      "id": "disco",
+      "name": "디스코",
+      "homepage": "https://disco.re/",
+      "domains": ["disco.re", "www.disco.re"],
+      "category": "commercial_land",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["commercial", "land", "house"],
+      "notes": "토지·건물·상업용 부동산 전문 확장 원천입니다."
+    },
+    {
+      "id": "valuemap",
+      "name": "밸류맵",
+      "homepage": "https://www.valueupmap.com/",
+      "domains": ["www.valueupmap.com", "valueupmap.com"],
+      "category": "commercial_land",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["commercial", "land", "house"],
+      "notes": "토지·건물 탐색용 원문 링크입니다."
+    },
+    {
+      "id": "ddangya",
+      "name": "땅야",
+      "homepage": "https://ddangya.com/",
+      "domains": ["ddangya.com", "www.ddangya.com"],
+      "category": "land",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["land"],
+      "notes": "토지 실거래·매물 탐색은 주거 단지 추천과 별도 모듈로 취급합니다."
+    },
+    {
+      "id": "onbid",
+      "name": "온비드",
+      "homepage": "https://www.onbid.co.kr/",
+      "domains": ["www.onbid.co.kr", "onbid.co.kr"],
+      "category": "auction",
+      "accessMode": "LINK_OUT_ONLY",
+      "regionLinkMode": "HOME_ONLY",
+      "supportsUserSuppliedUrl": true,
+      "supportedPropertyTypes": ["apartment", "officetel", "villa", "house", "commercial", "land"],
+      "notes": "공매 물건 원문 확인용입니다. 공식 API 연동은 별도 어댑터로 확장합니다."
+    }
+  ]
+}

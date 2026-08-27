@@ -22,13 +22,14 @@ def settings(tmp_path: Path) -> Settings:
 
 def test_canonical_tool_registration(tmp_path):
     _, names = create_mcp(settings=settings(tmp_path), enable_upstream_compat=False)
-    assert len(names) == 17
+    assert len(names) == 32
     assert "kr_apartment.get_transactions" in names
+    assert "kr_home.recommend_complexes" in names
     assert len(names) == len(set(names))
 
 
 def test_integrated_compatibility_registration(tmp_path):
     _, names = create_mcp(settings=settings(tmp_path), enable_upstream_compat=True)
-    assert len(names) == 33
+    assert len(names) == 48
     assert "get_apartment_trades" in names
     assert "get_apt_subscription_results" in names

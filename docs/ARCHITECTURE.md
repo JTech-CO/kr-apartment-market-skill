@@ -1,44 +1,46 @@
 # Runtime Architecture
 
-## Components
+현재 버전: 3.0.0
+
+전체 Home Finder 아키텍처는 [`HOME_FINDER_ARCHITECTURE.md`](HOME_FINDER_ARCHITECTURE.md)를 참조합니다.
+
+## 단일 서버
 
 ```text
-FastMCP
-├─ canonical tools
-│  ├─ location resolver
-│  ├─ unified transaction query
-│  ├─ complex analytics
-│  ├─ regional analytics
-│  ├─ deterministic finance
-│  └─ watchlist
-├─ PublicDataClient
-│  ├─ endpoint registry
-│  ├─ retry/backoff
-│  ├─ pagination
-│  ├─ secure XML parsing
-│  └─ normalization
-├─ Metrics Service
-├─ Local JSON Store
-└─ Vendored Compatibility Registration
+FastMCP: kr-apartment-market
+├─ kr_apartment.* 17 canonical tools
+├─ kr_home.* 15 canonical tools
+└─ real_estate compatibility 16 optional tools
 ```
 
-## Trust boundaries
-
-- MCP client input is untrusted.
-- API keys are process secrets.
-- Public API payload is untrusted XML and parsed with defusedxml.
-- Raw records are returned only when explicitly requested.
-- Local watchlist is not a multi-user security boundary.
-- Apt2Me remains link-only unless authorization metadata changes.
-
-## Scaling path
+## canonical runtime
 
 ```text
-single process/on-demand
-→ shared HTTP client + bounded cache
-→ PostgreSQL raw/revision store
-→ Redis region-month cache
-→ ingestion workers
-→ OAuth/RLS watchlists
-→ scheduled signal materialization
+src/kr_apartment_market/
+├─ data/          public API client, endpoint registry, parser, region resolver
+├─ services/      market metrics, finance, watchlist
+├─ home/          profile, scoring, recommender, listing links, saved search
+├─ tools/         MCP registration
+├─ resources/     region codes and listing-source registry
+└─ server.py      stdio / Streamable HTTP entry point
+```
+
+## 핵심 경계
+
+```text
+공공데이터       → 가격·거래량·시장 지표·추천 facts
+결정론적 코드     → score·confidence·exclusion
+AI               → 조건 추출과 결과 설명
+제3자 플랫폼      → 원문 광고매물 확인 링크
+승인 adapter      → 계약 범위의 선택형 metadata
+```
+
+## 확장 경로
+
+```text
+Local JSON
+→ PostgreSQL finder/listing schemas
+→ enrichment adapters
+→ authorized listing APIs
+→ first-party broker feeds
 ```

@@ -1,12 +1,12 @@
 [project]
 name = "kr-apartment-market-skill"
-version = "2.0.0"
-description = "Korean real-estate market AI Skill and integrated MCP server backed by public transaction data"
+version = "3.0.0"
+description = "Platform-neutral Korean AI Home Finder with public transaction analysis and listing-source links"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "JTech_CO" }]
-keywords = ["mcp", "real-estate", "korea", "apartment", "open-data", "ai-skill"]
+keywords = ["mcp", "real-estate", "korea", "apartment", "home-finder", "open-data", "ai-skill"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",

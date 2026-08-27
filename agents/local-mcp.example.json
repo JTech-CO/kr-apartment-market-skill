@@ -4,15 +4,17 @@
       "command": "uv",
       "args": [
         "run",
-        "--directory",
-        "/absolute/path/to/kr-apartment-market-skill",
         "kr-apartment-market",
         "--transport",
         "stdio"
       ],
       "env": {
-        "DATA_GO_KR_API_KEY": "your-service-key",
-        "ODCLOUD_API_KEY": "optional-odcloud-key"
+        "DATA_GO_KR_API_KEY": "${DATA_GO_KR_API_KEY}",
+        "ODCLOUD_API_KEY": "${ODCLOUD_API_KEY}",
+        "ODCLOUD_SERVICE_KEY": "${ODCLOUD_SERVICE_KEY}",
+        "KR_APARTMENT_WATCHLIST_PATH": ".data/watchlist.json",
+        "KR_HOME_FINDER_PATH": ".data/home_finder.json",
+        "ENABLE_REAL_ESTATE_MCP_COMPAT": "true"
       }
     }
   }

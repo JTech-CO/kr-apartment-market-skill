@@ -41,6 +41,7 @@ class Settings:
     max_months: int
     watchlist_path: Path
     enable_upstream_compat: bool
+    home_finder_path: Path = Path(".data/home_finder.json")
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -58,6 +59,9 @@ class Settings:
                 os.getenv("KR_APARTMENT_WATCHLIST_PATH", ".data/watchlist.json")
             ).expanduser(),
             enable_upstream_compat=_bool_env("ENABLE_REAL_ESTATE_MCP_COMPAT", True),
+            home_finder_path=Path(
+                os.getenv("KR_HOME_FINDER_PATH", ".data/home_finder.json")
+            ).expanduser(),
         )
 
 
